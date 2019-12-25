@@ -1,0 +1,42 @@
+{
+  "name": "capturetheflag",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest",
+    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/Setlist/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'",
+    "build:android": "npx jetify && cd android && ./gradlew assembleRelease",
+    "generateAndroidKey": "keytool -genkey -v -keystore setlistapp.keystore -alias mooselliot -keyalg RSA -keysize 2048 -validity 90000",
+    "init_ios_build": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",
+    "ios": "react-native run-ios",
+    "ios-XR": "react-native run-ios --simulator \"iPhone Xr\"",
+    "android": "react-native run-android",
+    "android:release": "react-native run-android --variant=release",
+    "androidlog": "adb logcat *:S ReactNative:V ReactNativeJS:V",
+    "android-linux": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && react-native run-android",
+    "ios show touch": "defaults write com.apple.iphonesimulator ShowSingleTouches 1",
+    "ios hide touch": "defaults write com.apple.iphonesimulator ShowSingleTouches 0",
+    "ios-record": "xcrun simctl io booted recordVideo screen.mov"
+  },
+  "dependencies": {
+    "@types/react": "^16.9.5",
+    "react": "16.9.0",
+    "react-native": "0.61.2",
+    "react-native-game-engine": "^0.12.3",
+    "socket.io-client": "^2.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/runtime": "^7.6.3",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.5.1",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.56.0",
+    "react-test-renderer": "16.9.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
