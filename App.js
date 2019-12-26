@@ -49,6 +49,7 @@ var GetEntities = ()=>{
         outerRadius: 60,
         innerPosition: [30, 40],
         innerRadius: 30,
+        touch_id: null,
         renderer: Joystick
     }
 
