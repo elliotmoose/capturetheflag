@@ -29,7 +29,7 @@ import {
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { PlayerUpdater } from './src/systems/systems';
+import { PlayerSystem } from './src/systems/PlayerSystem';
 import Joystick from './src/renderers/Joystick';
 import { ConnectToServer, SendControls, JoinRoom, players, InitializeSocketIO } from './src/managers/gamemanager';
 import Player from './src/renderers/Player';
@@ -50,10 +50,10 @@ var GetEntities = ()=>{
     let joystick = {
         type: 'joystick',
         // outerPosition: [SCREENWIDTH / 2, SCREENHEIGHT / 6 * 5],
-        outerPosition: [45 + 60, SCREENHEIGHT - 45 - 60],
-        outerRadius: 60,
-        innerPosition: [0, 0],
-        innerRadius: 30,
+        outer_position: [45 + 60, SCREENHEIGHT - 45 - 60],
+        outer_radius: 60,
+        inner_position: [0, 0],
+        inner_radius: 30,
         touch_id: null,
         active : false,
         angle: null,
@@ -79,8 +79,12 @@ var GetEntities = ()=>{
     {
         let player = players[i] || {
             type: 'player', 
-            position: [0,0],
-            speed: 4, 
+            position: [SCREENWIDTH/2, SCREENHEIGHT/2],
+            max_stamina: 100,
+            current_stamina: 100,            
+            sprint_speed: 10,
+            default_speed: 4,
+            current_speed: 4, 
             renderer: Player
         };
 
@@ -104,7 +108,7 @@ const App = () => {
     return (
         <GameEngine
             style={styles.container}
-            systems={[JoystickSystem, ButtonsSystem, ControlsSystem, PlayerUpdater]}
+            systems={[JoystickSystem, ButtonsSystem, ControlsSystem, PlayerSystem]}
             entities={entities}>
             
             <StatusBar hidden={true} />
