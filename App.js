@@ -29,7 +29,7 @@ import {
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { MoveFinger, PlayerUpdater } from './src/systems/systems';
+import { JoystickSystem, PlayerUpdater } from './src/systems/systems';
 import Joystick from './src/renderers/Joystick';
 import { ConnectToServer, SendControls, JoinRoom, players, InitializeSocketIO } from './src/managers/gamemanager';
 import Player from './src/renderers/Player';
@@ -47,7 +47,7 @@ var GetEntities = ()=>{
         type: 'joystick',
         outerPosition: [SCREENWIDTH / 2, SCREENHEIGHT / 4 * 3],
         outerRadius: 60,
-        innerPosition: [30, 40],
+        innerPosition: [0, 0],
         innerRadius: 30,
         touch_id: null,
         renderer: Joystick
@@ -82,7 +82,7 @@ const App = () => {
     return (
         <GameEngine
             style={styles.container}
-            systems={[MoveFinger, PlayerUpdater]}
+            systems={[JoystickSystem, PlayerUpdater]}
             entities={GetEntities()}>
 
             <StatusBar hidden={true} />

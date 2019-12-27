@@ -1,18 +1,8 @@
 import { players } from "../managers/gamemanager";
 
-export const MoveFinger = (entities, { touches }) => {
+export const JoystickSystem = (entities, { touches }) => {
+    const joytstick_reach = 10; //lets the joystick exceed the outer bounds
 
-    //-- I'm choosing to update the game state (entities) directly for the sake of brevity and simplicity.
-    //-- There's nothing stopping you from treating the game state as immutable and returning a copy..
-    //-- Example: return { ...entities, t.id: { UPDATED COMPONENTS }};
-    //-- That said, it's probably worth considering performance implications in either case.
-    // if(entities.players && entities.players.length != 0)
-    // {
-    //     console.log(entities.players);
-    //     return;
-    // }
-    
-    // console.log(entities);
     touches.forEach(t => {
         let joystick = entities["joystick"];
         
@@ -31,8 +21,8 @@ export const MoveFinger = (entities, { touches }) => {
                 if(t.type == "move") {
                     let temp_x = t.event.pageX - joystick.outerPosition[0];
                     let temp_y = t.event.pageY - joystick.outerPosition[1];        
-        
-                    let max_dist = joystick.outerRadius - joystick.innerRadius;
+                            
+                    let max_dist = joystick.outerRadius - joystick.innerRadius + joytstick_reach; 
                     let dist_from_center = Math.min(Math.sqrt(Math.pow(temp_x, 2) + Math.pow(temp_y,2)), max_dist); 
                     // dist_from_center = Math.sqrt(Math.pow(temp_x, 2) + Math.pow(temp_y,2));
                     let angle = Math.atan2(temp_y,temp_x);
@@ -52,10 +42,18 @@ export const MoveFinger = (entities, { touches }) => {
             let touch_x_relative = t.event.pageX - joystick.outerPosition[0];
             let touch_y_relative = t.event.pageY - joystick.outerPosition[1];    
             let touch_range = Math.sqrt(Math.pow(touch_x_relative, 2) + Math.pow(touch_y_relative, 2));
-            let touch_in_joystick = (touch_range <= joystick.outerRadius);
+            let joystick_max_dist = joystick.outerRadius + joytstick_reach;
+            let touch_in_joystick = (touch_range <= joystick_max_dist);
             if(t.type == "start" && touch_in_joystick) {
                 joystick.touch_id = t.id;
-                joystick.innerPosition = [touch_x_relative, touch_y_relative];
+                let max_dist = joystick.outerRadius - joystick.innerRadius + joytstick_reach; 
+                let dist_from_center = Math.min(Math.sqrt(Math.pow(touch_x_relative, 2) + Math.pow(touch_y_relative,2)), max_dist); 
+                // dist_from_center = Math.sqrt(Math.pow(temp_x, 2) + Math.pow(temp_y,2));
+                let angle = Math.atan2(touch_y_relative,touch_x_relative);
+    
+                let x = dist_from_center * Math.cos(angle);
+                let y = dist_from_center * Math.sin(angle);
+                joystick.innerPosition = [x, y];
             }
         }
 
