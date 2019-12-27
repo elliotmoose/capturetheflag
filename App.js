@@ -45,26 +45,31 @@ var GetEntities = ()=>{
     console.log('getting entities');
     let joystick = {
         type: 'joystick',
-        outerPosition: [SCREENWIDTH / 2, SCREENHEIGHT / 4 * 3],
+        outerPosition: [SCREENWIDTH / 2, SCREENHEIGHT / 6 * 5],
         outerRadius: 60,
         innerPosition: [0, 0],
         innerRadius: 30,
         touch_id: null,
+        active : false,
+        angle: null,
         renderer: Joystick
     }
 
+    
+
     let entities = {
         joystick: joystick,
-        // player: {
-        //     type: 'player',
-        //     position : [50,50],
-        //     renderer: Player
-        // }
     }
 
-    for(let i=0;i<10;i++)
+    for(let i=0;i<1;i++)
     {
-        let player = players[i] || {type: 'player', position: [0,0], renderer: Player};
+        let player = players[i] || {
+            type: 'player', 
+            position: [0,0],
+            speed: 10, 
+            renderer: Player
+        };
+
         entities[`${i+2}`] = player;
     }
 
@@ -87,7 +92,7 @@ const App = () => {
 
             <StatusBar hidden={true} />
 
-            <TouchableOpacity onPress={() => SendControls()} style={{
+            {/* <TouchableOpacity onPress={() => SendControls()} style={{
                 position: 'absolute',
                 bottom: 10,
                 left: 45,
@@ -114,7 +119,7 @@ const App = () => {
                 <Text>
                     Join Room
                 </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </GameEngine>
     );
 };

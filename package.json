@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/Setlist/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'",
+    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/capturetheflag/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'",
     "build:android": "npx jetify && cd android && ./gradlew assembleRelease",
     "generateAndroidKey": "keytool -genkey -v -keystore setlistapp.keystore -alias mooselliot -keyalg RSA -keysize 2048 -validity 90000",
     "init_ios_build": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",

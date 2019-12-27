@@ -15,6 +15,8 @@ export const JoystickSystem = (entities, { touches }) => {
             if(joystick.touch_id == t.id) {
                 if(t.type == "end") {
                     joystick.touch_id = null;
+                    joystick.active = false;
+                    joystick.angle = null;
                     joystick.innerPosition = [0,0];
                 }
 
@@ -31,6 +33,8 @@ export const JoystickSystem = (entities, { touches }) => {
                     let y = dist_from_center * Math.sin(angle);
         
                     joystick.innerPosition = [x,y];
+
+                    joystick.angle = angle;
                 }
             }
             else {
@@ -54,6 +58,8 @@ export const JoystickSystem = (entities, { touches }) => {
                 let x = dist_from_center * Math.cos(angle);
                 let y = dist_from_center * Math.sin(angle);
                 joystick.innerPosition = [x, y];
+                joystick.active = true;
+                joystick.angle = angle;
             }
         }
 
@@ -63,13 +69,27 @@ export const JoystickSystem = (entities, { touches }) => {
 };
 
 export const PlayerUpdater = (entities) => {    
-        
-    Object.values(entities).filter(e => e.type=='player').forEach((entity, index)=>{
-        if(players[index])
-        {
-            entity.position = players[index].position;
-        }
-    })
+    
+    let angle = entities["joystick"].angle;
+
+    if(angle) {
+        Object.values(entities).filter(e => e.type=='player').forEach((entity, index)=>{
+            if(!entity.speed) {
+                return;
+            }
+            
+            let x = entity.position[0] + entity.speed * Math.cos(angle);
+            let y = entity.position[1] + entity.speed * Math.sin(angle);
+            entity.position = [x,y];
+            
+            // if(players[index])
+            // {
+            //     entity.position = players[index].position;
+            // }
+        })
+    }
+
+
 
     return entities;
 };
