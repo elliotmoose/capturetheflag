@@ -29,10 +29,14 @@ import {
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { JoystickSystem, PlayerUpdater } from './src/systems/systems';
+import { PlayerUpdater } from './src/systems/systems';
 import Joystick from './src/renderers/Joystick';
 import { ConnectToServer, SendControls, JoinRoom, players, InitializeSocketIO } from './src/managers/gamemanager';
 import Player from './src/renderers/Player';
+import Button from './src/renderers/controls/Button';
+import { JoystickSystem } from './src/systems/JoystickSystem';
+import { ButtonsSystem } from './src/systems/ButtonsSystem';
+import { ControlsSystem } from './src/systems/ControlsSystem';
 
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get("window");
@@ -45,7 +49,8 @@ var GetEntities = ()=>{
     console.log('getting entities');
     let joystick = {
         type: 'joystick',
-        outerPosition: [SCREENWIDTH / 2, SCREENHEIGHT / 6 * 5],
+        // outerPosition: [SCREENWIDTH / 2, SCREENHEIGHT / 6 * 5],
+        outerPosition: [45 + 60, SCREENHEIGHT - 45 - 60],
         outerRadius: 60,
         innerPosition: [0, 0],
         innerRadius: 30,
@@ -55,10 +60,19 @@ var GetEntities = ()=>{
         renderer: Joystick
     }
 
-    
+    let sprint_button = {
+        type: "button",
+        id: "sprint_button",
+        position: [SCREENWIDTH - 45 - 36, SCREENHEIGHT - 45 - 36],
+        radius: 36,
+        touch_id: null,
+        active: false,
+        renderer: Button
+    }
 
     let entities = {
         joystick: joystick,
+        sprint_button
     }
 
     for(let i=0;i<1;i++)
@@ -66,7 +80,7 @@ var GetEntities = ()=>{
         let player = players[i] || {
             type: 'player', 
             position: [0,0],
-            speed: 10, 
+            speed: 4, 
             renderer: Player
         };
 
@@ -76,6 +90,8 @@ var GetEntities = ()=>{
     
     return entities;
 }
+
+let entities = GetEntities();
 const App = () => {
     console.disableYellowBox = true;
 
@@ -83,14 +99,36 @@ const App = () => {
     // console.log(`players ${players}`);
     // console.log(entities);
 
+    const button_height = 70;
 
     return (
         <GameEngine
             style={styles.container}
-            systems={[JoystickSystem, PlayerUpdater]}
-            entities={GetEntities()}>
-
+            systems={[JoystickSystem, ButtonsSystem, ControlsSystem, PlayerUpdater]}
+            entities={entities}>
+            
             <StatusBar hidden={true} />
+            {/* <TouchableOpacity style={{
+                position: 'absolute',
+                right: 45,
+                bottom: 45,
+                height: button_height,
+                width: button_height,
+                borderRadius: button_height/2,
+                backgroundColor: 'lightgreen',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }} onPressIn={()=>{
+                entities[2].speed = 10;
+            }} onPressOut={()=>{
+                entities[2].speed = 4;
+            }}>
+                <Text>
+                    Sprint
+                </Text>
+            </TouchableOpacity> */}
+
+
 
             {/* <TouchableOpacity onPress={() => SendControls()} style={{
                 position: 'absolute',
