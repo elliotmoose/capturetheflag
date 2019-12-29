@@ -12,21 +12,8 @@ export var InitializeSocketIO = ()=>{
         console.log('connected to lobby')
         // JoinRoom("elliot'sroom");
     });        
-    
-    socket.on('JOIN_ROOM_CONFIRMED', function(room_id){
-        socket = io(`${server}/${room_id}`);
-                
-        // JoinRoom("elliot'sroom");
 
-        socket.on('hello', function(test){
-            console.log('hello');
-            // JoinRoom("elliot'sroom");
-        });    
-        
-        
-    });
-
-    socket.on('MATCH_FOUND', (namespace)=> {
+    socket.on('JOIN_ROOM_CONFIRMED', (namespace)=> {
         console.log(`Match found for namespace: ${namespace}`);
         socket = io(`${server}/${namespace}`);
 
