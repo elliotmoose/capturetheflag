@@ -31,7 +31,7 @@ import {
 
 import { PlayerSystem } from './src/systems/PlayerSystem';
 import Joystick from './src/renderers/Joystick';
-import { ConnectToServer, SendControls, JoinRoom, players, InitializeSocketIO } from './src/managers/gamemanager';
+import { ConnectToServer, SendControls, JoinRoom, players, InitializeSocketIO, FindMatch } from './src/managers/gamemanager';
 import Player from './src/renderers/Player';
 import Button from './src/renderers/controls/Button';
 import { JoystickSystem } from './src/systems/JoystickSystem';
@@ -42,7 +42,7 @@ import { ControlsSystem } from './src/systems/ControlsSystem';
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get("window");
 
 InitializeSocketIO();
-
+FindMatch();
 
 var GetEntities = ()=>{
     
@@ -95,7 +95,6 @@ var GetEntities = ()=>{
     return entities;
 }
 
-let entities = GetEntities();
 const App = () => {
     console.disableYellowBox = true;
 
@@ -109,59 +108,9 @@ const App = () => {
         <GameEngine
             style={styles.container}
             systems={[JoystickSystem, ButtonsSystem, ControlsSystem, PlayerSystem]}
-            entities={entities}>
+            entities={GetEntities()}>
             
             <StatusBar hidden={true} />
-            {/* <TouchableOpacity style={{
-                position: 'absolute',
-                right: 45,
-                bottom: 45,
-                height: button_height,
-                width: button_height,
-                borderRadius: button_height/2,
-                backgroundColor: 'lightgreen',
-                justifyContent: 'center',
-                alignItems: 'center',
-            }} onPressIn={()=>{
-                entities[2].speed = 10;
-            }} onPressOut={()=>{
-                entities[2].speed = 4;
-            }}>
-                <Text>
-                    Sprint
-                </Text>
-            </TouchableOpacity> */}
-
-
-
-            {/* <TouchableOpacity onPress={() => SendControls()} style={{
-                position: 'absolute',
-                bottom: 10,
-                left: 45,
-                right: 45,                
-                height: 40,
-                backgroundColor: 'green',
-                justifyContent: 'center',
-                alignContent: 'center',
-            }}>
-                <Text>
-                    Send Controls
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => JoinRoom(`elliot'sroom`)} style={{
-                position: 'absolute',
-                bottom: 60,
-                left: 45,
-                right: 45,                
-                height: 40,
-                backgroundColor: 'red',
-                justifyContent: 'center',
-                alignContent: 'center',
-            }}>
-                <Text>
-                    Join Room
-                </Text>
-            </TouchableOpacity> */}
         </GameEngine>
     );
 };

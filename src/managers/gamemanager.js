@@ -12,16 +12,11 @@ export var InitializeSocketIO = ()=>{
         console.log('connected to lobby')
         // JoinRoom("elliot'sroom");
     });        
-    
-    socket.on('JOIN_ROOM_CONFIRMED', function(room_id){
-        socket = io(`${server}/${room_id}`);
-        // JoinRoom("elliot'sroom");
 
-        socket.on('hello', function(test){
-            console.log('hello');
-            // JoinRoom("elliot'sroom");
-        });    
-        
+    socket.on('JOIN_ROOM_CONFIRMED', (namespace)=> {
+        console.log(`Match found for namespace: ${namespace}`);
+        socket = io(`${server}/${namespace}`);
+
         socket.on('GAME_STATE', function(state){
             console.log(state);
         
@@ -42,7 +37,9 @@ export var InitializeSocketIO = ()=>{
     });
 }
 
-
+export var FindMatch = () => {
+    socket.emit("REQUEST_FIND_MATCH");
+}
 
 export var JoinRoom = (room_id)=>{
     socket.emit('REQUEST_JOIN_ROOM', room_id);
