@@ -23,6 +23,13 @@ export var InitializeSocketIO = ()=>{
             // JoinRoom("elliot'sroom");
         });    
         
+        
+    });
+
+    socket.on('MATCH_FOUND', (namespace)=> {
+        console.log(`Match found for namespace: ${namespace}`);
+        socket = io(`${server}/${namespace}`);
+
         socket.on('GAME_STATE', function(state){
             console.log(state);
         
@@ -40,11 +47,6 @@ export var InitializeSocketIO = ()=>{
             // players = state.players
             // JoinRoom("elliot'sroom");
         });
-    });
-
-    socket.on('MATCH_FOUND', (namespace)=> {
-        console.log(`Match found for namespace: ${namespace}`);
-        socket = io(`${server}/${namespace}`);
     });
 }
 
