@@ -15,6 +15,7 @@ export var InitializeSocketIO = ()=>{
     
     socket.on('JOIN_ROOM_CONFIRMED', function(room_id){
         socket = io(`${server}/${room_id}`);
+                
         // JoinRoom("elliot'sroom");
 
         socket.on('hello', function(test){
@@ -40,9 +41,16 @@ export var InitializeSocketIO = ()=>{
             // JoinRoom("elliot'sroom");
         });
     });
+
+    socket.on('MATCH_FOUND', (namespace)=> {
+        console.log(`Match found for namespace: ${namespace}`);
+        socket = io(`${server}/${namespace}`);
+    });
 }
 
-
+export var FindMatch = () => {
+    socket.emit("REQUEST_FIND_MATCH");
+}
 
 export var JoinRoom = (room_id)=>{
     socket.emit('REQUEST_JOIN_ROOM', room_id);
