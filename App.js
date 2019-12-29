@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 // import {} from 'react-native-socketio'
 import { GameEngine } from 'react-native-game-engine';
 
@@ -71,7 +71,7 @@ var GetEntities = ()=>{
     }
 
     let entities = {
-        joystick: joystick,
+        joystick,
         sprint_button
     }
 
@@ -174,3 +174,6 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+
+
+
