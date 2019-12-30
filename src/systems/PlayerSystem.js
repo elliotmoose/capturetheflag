@@ -6,67 +6,69 @@ const Lerp = (from, to, progress) => {
 }
 
 export const PlayerSystem = (entities, {time}) => {    
-    for(let updated_state_player of players){
+    for(let updated_state_player of players){                
         if(entities[updated_state_player.id] === undefined) {
             //the player entity is same as the player object except for its renderer and type attributes
             let player = {
                 ...updated_state_player,
                 type: 'player',
+                from_lerp_package: null,
+                to_lerp_package: null,
+                lerp_progress: 0,
                 renderer: Player
             }
-
+            
             entities[updated_state_player.id] = player;            
         }
         else {
-            let player = entities[updated_state_player.id];
-            //receive lerp data            
-            player.from_lerp_package = updated_state_player.from_lerp_package;
-            player.to_lerp_package = updated_state_player.to_lerp_package;
+            let player = entities[updated_state_player.id];            
             
-            //TODO: for testing, just set position to latest packet received
-            // let last_position = player.lerp_queue.length == 0 ? [0,0] : player.lerp_queue[player.lerp_queue.length-1].position;
-            
-            //TODO: lerping implementation
-            // player.position = last_position;
-            
-            let from = updated_state_player.from_lerp_package;
-            let to = updated_state_player.to_lerp_package;
-
-            // console.log(player)
-            
-            if(from && to) {
-                let time_frame = to.timestamp - from.timestamp;
-                player.position[0] = Lerp(from.position[0], to.position[0], player.lerp_progress);
-                player.position[1] = Lerp(from.position[1], to.position[1], player.lerp_progress);
-                
-                //reached destination
-                if(player.lerp_progress >= 1) {
-
-                    //destination is new starting point
-                    updated_state_player.from_lerp_package = to;
-                    
-                    //if got no more packages to receive
-                    if(updated_state_player.lerp_queue.length == 0) {
-                        // console.log('no more packages');                        
-                        updated_state_player.to_lerp_package = null;
+            if(player.to_lerp_package && player.from_lerp_package) {
+                //the player's latest target position is not updated (aka we've received a new update)
+                if(player.to_lerp_package.position != updated_state_player.position) {                                    
+                    let time_since_from = player.lerp_progress * (player.to_lerp_package.timestamp - player.from_lerp_package.timestamp);
+    
+                    //update the start point to current
+                    player.from_lerp_package = {
+                        position: player.position,
+                        timestamp: player.from_lerp_package.timestamp + time_since_from
                     }
-                    else {
-                        updated_state_player.to_lerp_package = updated_state_player.lerp_queue[0];                        
-                        updated_state_player.lerp_queue.splice(0, 1);
-                        // console.log('reset lerp progress');
-                        player.lerp_progress = 0;                                                
+    
+                    //lets update the target position and time
+                    player.to_lerp_package = {
+                        position: updated_state_player.position,
+                        timestamp: Date.now()
                     }
+
+                    //reset progress
+                    player.lerp_progress = 0;
                 }
-                else {
-                    player.lerp_progress += time.delta/time_frame;
+
+                let time_frame = player.to_lerp_package.timestamp - player.from_lerp_package.timestamp;
+                player.lerp_progress = Math.min(1, player.lerp_progress + time.delta/time_frame);
+                player.position[0] = Lerp(player.from_lerp_package.position[0], player.to_lerp_package.position[0], player.lerp_progress);
+                player.position[1] = Lerp(player.from_lerp_package.position[1], player.to_lerp_package.position[1], player.lerp_progress);
+            }
+            else if (player.from_lerp_package) { //mid init (to_lerp_package == null)
+                //lets update the target position and time
+                player.to_lerp_package = {
+                    position: updated_state_player.position,
+                    timestamp: Date.now()
                 }
-                
-                console.log(updated_state_player.lerp_queue.length);
+
+                //reset progress
+                player.lerp_progress = 0;
+            }
+            else { //init
+                //lets update the target position and time
+                player.from_lerp_package = {
+                    position: updated_state_player.position,
+                    timestamp: Date.now()
+                }
             }
 
-            if(from && !to) {
-                player.position = from.position;                
-            }
+            
+            return entities;                      
 
             /*
             Lerp occurs in 3 scenarios:
