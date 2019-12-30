@@ -27,8 +27,18 @@ export var OnReceiveGameState = (state)=>{
         
         //if this player has never been rendered -> we must add them into the array for the first time
         if(player_index_ref == -1) {            
+            /*the template object received is used to initialize the player object in the array
+            this object does not include:
+            1. renderer (added in player system)
+            2. type (added in player system)
+            3. lerp[] (added in this step)            
+            */
             new_state_player.lerp = [];//lerp object array
-            players.push(new_state_player);
+            new_state_player.lerp_from_position = new_state_player.position;
+            new_state_player.lerp_to_position = new_state_player.position;
+            new_state_player.lerp_progress = 0; //0 to 1, a value to signify th
+            new_state_player.lerp_time_frame = 0;
+            players.push(new_state_player);             
         }
         else {
             //has been rendered before, so we append the updates into the lerp array

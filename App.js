@@ -75,21 +75,21 @@ var GetEntities = ()=>{
         sprint_button
     }
 
-    for(let i=0;i<1;i++)
-    {
-        let player = players[i] || {
-            type: 'player', 
-            position: [SCREENWIDTH/2, SCREENHEIGHT/2],
-            max_stamina: 100,
-            current_stamina: 100,            
-            sprint_speed: 10,
-            default_speed: 4,
-            current_speed: 4, 
-            renderer: Player
-        };
+    // for(let i=0;i<1;i++)
+    // {
+    //     let player = players[i] || {
+    //         type: 'player', 
+    //         position: [SCREENWIDTH/2, SCREENHEIGHT/2],
+    //         max_stamina: 100,
+    //         current_stamina: 100,            
+    //         sprint_speed: 10,
+    //         default_speed: 4,
+    //         current_speed: 4, 
+    //         renderer: Player
+    //     };
 
-        entities[`${i+2}`] = player;
-    }
+    //     entities[`${i+2}`] = player;
+    // }
 
     
     return entities;
