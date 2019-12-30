@@ -31,24 +31,46 @@ export var OnReceiveGameState = (state)=>{
             this object does not include:
             1. renderer (added in player system)
             2. type (added in player system)
-            3. lerp[] (added in this step)            
+            3. lerp_queue[] (added in this step)            
             */
-            new_state_player.lerp = [];//lerp object array
-            new_state_player.lerp_from_position = new_state_player.position;
-            new_state_player.lerp_to_position = new_state_player.position;
-            new_state_player.lerp_progress = 0; //0 to 1, a value to signify th
-            new_state_player.lerp_time_frame = 0;
+            new_state_player.lerp_queue = [];//lerp object array
+            new_state_player.from_lerp_package = null;
+            new_state_player.to_lerp_package = null;
+            new_state_player.lerp_progress = 0; //0 to 1, a value to signify th                   
             players.push(new_state_player);             
         }
         else {
             //has been rendered before, so we append the updates into the lerp array
             let player = players[player_index_ref];
-            let lerp_package = {
+            let new_lerp_package = {
                 position: new_state_player.position,
                 timestamp: Date.now()
             }
-            
-            player.lerp.push(lerp_package);
+
+            console.log(`new package: ${new_lerp_package.position}`);
+
+            if(player.from_lerp_package) {                 
+                if(player.to_lerp_package) { //post init                    
+                    // console.log('post')
+                    player.lerp_queue.push(new_lerp_package);
+                }
+                else { //mid init
+                    // console.log('mid')
+                    player.to_lerp_package = new_lerp_package;
+                }
+            }
+            else {
+                if(player.to_lerp_package) {  //no from, have to (edge)
+                    player.from_lerp_package = player.to_lerp_package;
+                    player.to_lerp_package = new_lerp_package;
+                }
+                else { //init
+                    // console.log('init')
+                    player.from_lerp_package = new_lerp_package;
+                    player.to_lerp_package = null;
+                }
+            }
+
             player.max_stamina = new_state_player.max_stamina;
             player.current_stamina = new_state_player.current_stamina;
             player.sprint_speed = new_state_player.sprint_speed;
