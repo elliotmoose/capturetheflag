@@ -88,8 +88,8 @@ var GetEntities = ()=>{
 
     let entities = {
         map,
-        joystick,
         sprint_button,
+        joystick,
         camera
     }
 

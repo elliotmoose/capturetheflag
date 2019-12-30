@@ -6,8 +6,10 @@ const RADIUS = 20;
  
 export default class Player extends PureComponent {
   render() {
-    let x = this.props.position[0] - RADIUS;
-    let y = this.props.position[1] - RADIUS;
+    // let x = this.props.position[0] - RADIUS;
+    // let y = this.props.position[1] - RADIUS;
+    let x = this.props.render_position[0] - RADIUS;
+    let y = this.props.render_position[1] - RADIUS;
     let stamina_percentage = this.props.current_stamina/this.props.max_stamina;        
 
     const stamina_width = 80;
