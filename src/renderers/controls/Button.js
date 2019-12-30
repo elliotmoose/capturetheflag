@@ -21,5 +21,6 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgreen",
     position: "absolute",
     padding: 0,
+    zIndex: 999
   }
 });
