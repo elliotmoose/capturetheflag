@@ -18,7 +18,8 @@ import {
     Text,
     TouchableOpacity,
     StatusBar,
-    Dimensions
+    Dimensions,
+    Image
 } from 'react-native';
 
 import {
@@ -37,9 +38,12 @@ import Button from './src/renderers/controls/Button';
 import { JoystickSystem } from './src/systems/JoystickSystem';
 import { ButtonsSystem } from './src/systems/ButtonsSystem';
 import { ControlsSystem } from './src/systems/ControlsSystem';
+import Images from './src/assets/Images';
+import { CameraSystem } from './src/systems/CameraSystem';
+import Map from './src/renderers/Map';
 
 
-const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get("window");
+const { width: SCREENWIDTH, height: SCREENHEIGHT} = Dimensions.get("window"); //landscape
 
 InitializeSocketIO();
 FindMatch();
@@ -50,7 +54,8 @@ var GetEntities = ()=>{
     let joystick = {
         type: 'joystick',
         // outerPosition: [SCREENWIDTH / 2, SCREENHEIGHT / 6 * 5],
-        outer_position: [45 + 60, SCREENHEIGHT - 45 - 60],
+        outer_position: [75 + 60, SCREENHEIGHT - 45 - 60],
+        // outer_position: [30, SCREENHEIGHT - 30],
         outer_radius: 60,
         inner_position: [0, 0],
         inner_radius: 30,
@@ -70,9 +75,22 @@ var GetEntities = ()=>{
         renderer: Button
     }
 
+    let camera = {
+        position: [0,0],
+        target : null
+    }
+
+    let map = {
+        position: [0,0],
+        render_position: [],
+        renderer: Map
+    }
+
     let entities = {
+        map,
         joystick,
-        sprint_button
+        sprint_button,
+        camera
     }
 
     // for(let i=0;i<1;i++)
@@ -95,30 +113,29 @@ var GetEntities = ()=>{
     return entities;
 }
 
+let entities = GetEntities();
+
 const App = () => {
     console.disableYellowBox = true;
-
 
     // console.log(`players ${players}`);
     // console.log(entities);
 
-    const button_height = 70;
-
     return (
         <GameEngine
             style={styles.container}
-            systems={[JoystickSystem, ButtonsSystem, ControlsSystem, PlayerSystem]}
-            entities={GetEntities()}>
+            systems={[JoystickSystem, ButtonsSystem, ControlsSystem, PlayerSystem, CameraSystem]}
+            entities={entities}>
             
             <StatusBar hidden={true} />
-        </GameEngine>
+        </GameEngine>        
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: "#FFF"
+        flex: 1,        
+        backgroundColor: 'black'
     }
 });
 
