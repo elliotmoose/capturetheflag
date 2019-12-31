@@ -47,6 +47,7 @@ import {ControlsSystem} from './src/systems/ControlsSystem';
 import Images from './src/assets/Images';
 import {CameraSystem} from './src/systems/CameraSystem';
 import Map from './src/renderers/Map';
+import { FlagSystem } from './src/systems/FlagSystem';
 
 const {width: SCREENWIDTH, height: SCREENHEIGHT} = Dimensions.get('window'); //landscape
 
@@ -90,14 +91,8 @@ var GetEntities = () => {
     renderer: Map,
   };
 
-  let player = {
-    position: [0, 0],
-    render_position: [0, 0],
-    renderer: Player,
-  };
   let entities = {
-    map,
-    // player,
+    map,    
     sprint_button,
     joystick,
     camera,
@@ -134,6 +129,7 @@ const App = () => {
     <GameEngine
       style={styles.container}
       systems={[
+        FlagSystem,
         JoystickSystem,
         ButtonsSystem,
         ControlsSystem,

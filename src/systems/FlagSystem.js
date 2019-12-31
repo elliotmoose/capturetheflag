@@ -21,7 +21,8 @@ export const FlagSystem = (entities, {time}) => {
             entities[updated_state_flag.id] = flag;            
         }
         else {
-            let flag = entities[updated_state_flag.id];            
+            let flag = entities[updated_state_flag.id];      
+            // console.log(updated_state_flag.position);
             
             if(flag.to_lerp_package && flag.from_lerp_package) {
                 //the player's latest target position is not updated (aka we've received a new update)
@@ -69,54 +70,9 @@ export const FlagSystem = (entities, {time}) => {
                 }
             }
 
-            
-            return entities;                      
-
-            /*
-            Lerp occurs in 3 scenarios:
-            1. Init: from_lerp_package == null, to_lerp_package == null, lerp_queue.length == 0
-            2. Mid-Init: from_lerp_package != null, to_lerp_package == null, lerp_queue.length == 0
-            3. Post-Init from_lerp_package != null, to_lerp_package != null lerp_queue.length >= 0
-
-            Scenario 1 and 2:
-            We snap position. 
-            if to_lerp_package == null:
-                player.position = from_lerp_package == null ? [start_x,start_y] : from_lerp_package.position;
-
-            Scenario 3:
-            player.position = interpolate(from_position, to_position, progress)            
-            time_frame = to_lerp_package.timestamp - from_lerp_package.timestamp                                    
-            progress += (time.delta/time_frame) //because progress should increase relative to given time frame. 1 means we have reached destination
-
-            if progress >= 1:
-                progress = 0
-                from_lerp_package = to_lerp_package
-
-                if(lerp_queue != null)
-                    to_lerp_package = lerp_queue[0]
-                else                    
-            */
+            // flag.position = updated_state_flag.position;                                   
         }
-    }    
-    let angle = entities["joystick"].angle;
-
-    if(angle) {
-        Object.values(entities).filter(e => e.type=='player').forEach((entity, index)=>{
-            if(!entity.current_speed) {
-                return;
-            }
-            
-            let x = entity.position[0] + entity.current_speed * Math.cos(angle);
-            let y = entity.position[1] + entity.current_speed * Math.sin(angle);
-            entity.position = [x,y];
-            
-            // if(players[index])
-            // {
-            //     entity.position = players[index].position;
-            // }
-        })
-    }
-
+    }       
 
 
     return entities;

@@ -26,10 +26,7 @@ export const PlayerSystem = (entities, {time}) => {
       if (player.to_lerp_package && player.from_lerp_package) {
         //the player's latest target position is not updated (aka we've received a new update)
         if (player.to_lerp_package.position != updated_state_player.position) {
-          let time_since_from =
-            player.lerp_progress *
-            (player.to_lerp_package.timestamp -
-              player.from_lerp_package.timestamp);
+          let time_since_from = player.lerp_progress * (player.to_lerp_package.timestamp - player.from_lerp_package.timestamp);
 
           //update the start point to current
           player.from_lerp_package = {
@@ -48,22 +45,10 @@ export const PlayerSystem = (entities, {time}) => {
           player.lerp_progress = 0;
         }
 
-        let time_frame =
-          player.to_lerp_package.timestamp - player.from_lerp_package.timestamp;
-        player.lerp_progress = Math.min(
-          1,
-          player.lerp_progress + time.delta / time_frame,
-        );
-        player.position[0] = Lerp(
-          player.from_lerp_package.position[0],
-          player.to_lerp_package.position[0],
-          player.lerp_progress,
-        );
-        player.position[1] = Lerp(
-          player.from_lerp_package.position[1],
-          player.to_lerp_package.position[1],
-          player.lerp_progress,
-        );
+        let time_frame = player.to_lerp_package.timestamp - player.from_lerp_package.timestamp;
+        player.lerp_progress = Math.min(1, player.lerp_progress + time.delta / time_frame,);
+        player.position[0] = Lerp(player.from_lerp_package.position[0], player.to_lerp_package.position[0], player.lerp_progress);
+        player.position[1] = Lerp(player.from_lerp_package.position[1], player.to_lerp_package.position[1], player.lerp_progress);
         // console.log(`from: ${player.from_lerp_package.position[1]}, to: ${player.to_lerp_package.position[1]}`);
       } else if (player.from_lerp_package) {
         //mid init (to_lerp_package == null)

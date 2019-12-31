@@ -6,7 +6,7 @@ export default class Flag extends PureComponent {
   render() {
     // let x = this.props.position[0] - RADIUS;
     // let y = this.props.position[1] - RADIUS;
-    let radius = 10;
+    let radius = this.props.radius;
     let x = this.props.render_position[0] - radius;
     let y = this.props.render_position[1] - radius;
     return (
@@ -21,10 +21,6 @@ const styles = StyleSheet.create({
     backgroundColor: "green",
     position: "absolute",
     padding: 0,
-  },
-  stick: {
-    borderColor: "#CCC",
-    backgroundColor: "red",
-    position: "absolute"
+    zIndex: 400
   }
 });
