@@ -82,17 +82,24 @@ var GetEntities = ()=>{
 
     let map = {
         position: [0,0],
-        render_position: [],
+        render_position: [0, 0],
         renderer: Map
     }
 
+    let player = {
+        position: [0,0],
+        render_position: [0, 0],
+        renderer: Player
+    }
     let entities = {
         map,
+        // player,
         sprint_button,
         joystick,
-        camera
+        camera,
     }
 
+    
     // for(let i=0;i<1;i++)
     // {
     //     let player = players[i] || {
