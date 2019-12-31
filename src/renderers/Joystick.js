@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     backgroundColor: "pink",
     position: "absolute",
     padding: 0,
+    zIndex: 999
   },
   stick: {
     borderColor: "#CCC",
