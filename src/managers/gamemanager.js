@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 import Player from '../renderers/Player';
 
 export var players = []; 
+export var flags = []; 
 const server = 'http://localhost:3000';
 var socket = io(server);
 
@@ -22,6 +23,7 @@ export var JoinRoom = (namespace)=>{
 
 export var OnReceiveGameState = (state)=>{        
     players = state.players;
+    flags = state.flags;
 }
 
 export var SendControls = (controls)=>{    
