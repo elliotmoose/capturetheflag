@@ -79,6 +79,16 @@ var GetEntities = () => {
     active: false,
     renderer: Button,
   };
+  
+  let action_button = {
+    type: 'button',
+    id: 'action_button',
+    position: [SCREENWIDTH - 45 - 36, SCREENHEIGHT - 45 - 36 - 36*2 - 20],
+    radius: 36,
+    touch_id: null,
+    active: false,
+    renderer: Button,
+  };
 
   let camera = {
     position: [0, 0],
@@ -94,6 +104,7 @@ var GetEntities = () => {
   let entities = {
     map,    
     sprint_button,
+    action_button,
     joystick,
     camera,
   };

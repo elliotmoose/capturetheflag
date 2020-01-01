@@ -15,6 +15,10 @@ export const ControlsSystem = (entities, {touches}) => {
     controls.sprint = true;
   }
 
+  if (entities.action_button.active) {
+    controls.action = true;
+  }
+
   SendControls(controls);
 
   //   Object.values(entities)
