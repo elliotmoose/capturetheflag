@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "enyi_init": "sudo sysctl fs.inotify.max_user_watches=524288 && sudo sysctl -p && adb reverse tcp:3000 tcp:3000",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/capturetheflag/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'",
