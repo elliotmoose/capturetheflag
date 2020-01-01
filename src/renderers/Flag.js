@@ -10,15 +10,13 @@ export default class Flag extends PureComponent {
     let x = this.props.render_position[0] - radius;
     let y = this.props.render_position[1] - radius;
     return (
-      <Image source={Images.map} resizeMode='contain' style={[styles.container, { left: x, top: y, borderRadius: radius, height: radius*2, width: radius*2, }]}/>        
+      <Image source={this.props.team == 0 ? Images.flag_green : Images.flag_red} resizeMode='contain' style={[styles.container, { left: x, top: y, borderRadius: radius, height: radius*2, width: radius*2, }]}/>        
     );
   }
 }
  
 const styles = StyleSheet.create({
-  container: {
-    borderColor: "#CCC",    
-    backgroundColor: "green",
+  container: {        
     position: "absolute",
     padding: 0,
     zIndex: 400

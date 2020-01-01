@@ -34,8 +34,7 @@ export const FlagSystem = (entities, {time}) => {
                         position: JSON.parse(JSON.stringify(flag.position)),
                         timestamp: flag.from_lerp_package.timestamp + time_since_from
                     }
-    
-                    console.log(time_since_from);
+                        
                     //lets update the target position and time
                     flag.to_lerp_package = {
                         position: updated_state_flag.position,
