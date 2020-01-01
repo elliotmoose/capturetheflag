@@ -4,19 +4,14 @@ const {width: SCREENWIDTH, height: SCREENHEIGHT} = Dimensions.get('window'); //l
 export const CameraSystem = (entities, {time}) => {
   let camera = entities['camera'];
   let joystick = entities['joystick'];
-
-  //TODO: camera test
+  
+  //camera movement if no target
   if (joystick.active) {
-    let angle = joystick.angle;
-    // console.log(camera.position);
+    let angle = joystick.angle;    
     let speed = 5;
     camera.position[0] += Math.cos(angle) * speed;
     camera.position[1] += Math.sin(angle) * speed;
   }
-
-  // if(camera.target) {
-
-  // }
 
   let player = Object.values(entities).filter(e => e.type == 'player')[0];
   if (player) {

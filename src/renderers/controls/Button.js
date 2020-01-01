@@ -8,9 +8,7 @@ export default class Button extends PureComponent {
     let y = this.props.position[1] - radius;
     
     return (
-      <View style={[styles.container, { left: x, top: y, borderRadius: radius, height: radius*2, width: radius*2, opacity: this.props.active ? 0.5 : 1}]}>
-          
-      </View>
+      <View style={[styles.container, { left: x, top: y, borderRadius: radius, height: radius*2, width: radius*2, opacity: this.props.active ? 0.5 : 1}]}/>      
     );
   }
 }
