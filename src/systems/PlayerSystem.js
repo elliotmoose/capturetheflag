@@ -21,7 +21,14 @@ export const PlayerSystem = (entities, {time}) => {
       entities[updated_state_player.id] = player;
     } else {
       let player = entities[updated_state_player.id];
+
+      //UPDATE ALL STATS
       player.current_stamina = updated_state_player.current_stamina;
+      player.action = updated_state_player.action;
+      player.radius = updated_state_player.radius;
+      player.reach = updated_state_player.reach;
+      player.prison = updated_state_player.prison;
+      player.sprint = updated_state_player.sprint;
 
       if (player.to_lerp_package && player.from_lerp_package) {
         //the player's latest target position is not updated (aka we've received a new update)
