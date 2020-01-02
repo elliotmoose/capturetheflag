@@ -19,7 +19,7 @@ export var FindMatch = () => {
 
 export var JoinRoom = namespace => {
   socket = io(`${server}/${namespace}`);
-  socket.on('MAP_DATA', state => OnReceiveGameMap(state));
+  socket.on('INIT_MAP', state => OnReceiveGameMap(state));
   socket.on('GAME_STATE', state => OnReceiveGameState(state));
 };
 
