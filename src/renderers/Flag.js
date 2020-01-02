@@ -19,6 +19,6 @@ const styles = StyleSheet.create({
   container: {        
     position: "absolute",
     padding: 0,
-    zIndex: 400
+    zIndex: 600
   }
 });

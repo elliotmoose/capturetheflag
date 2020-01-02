@@ -1,4 +1,5 @@
 import {Dimensions} from 'react-native';
+import { player_id } from '../managers/gamemanager';
 
 const {width: SCREENWIDTH, height: SCREENHEIGHT} = Dimensions.get('window'); //landscape
 export const CameraSystem = (entities, {time}) => {
@@ -12,12 +13,15 @@ export const CameraSystem = (entities, {time}) => {
     camera.position[0] += Math.cos(angle) * speed;
     camera.position[1] += Math.sin(angle) * speed;
   }
-
-  let player = Object.values(entities).filter(e => e.type == 'player')[0];
-  if (player) {
-    let x = player.position[0] - SCREENWIDTH / 2;
-    let y = player.position[1] - SCREENHEIGHT / 2;
-    camera.position = [x, y];
+  
+  if(player_id) {
+    let player = Object.values(entities).filter(e => e.id == player_id)[0];
+  
+    if (player) {
+      let x = player.position[0] - SCREENWIDTH / 2;
+      let y = player.position[1] - SCREENHEIGHT / 2;
+      camera.position = [x, y];
+    }
   }
 
   for (let entity of Object.values(entities)) {

@@ -11,7 +11,7 @@
     "generateAndroidKey": "keytool -genkey -v -keystore setlistapp.keystore -alias mooselliot -keyalg RSA -keysize 2048 -validity 90000",
     "init_ios_build": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",
     "ios": "react-native run-ios",
-    "ios-XR": "react-native run-ios --simulator \"iPhone Xr\"",
+    "ios-XR": "react-native run-ios --simulator \"iPhone Xʀ\"",
     "android": "react-native run-android",
     "android:release": "react-native run-android --variant=release",
     "androidlog": "adb logcat *:S ReactNative:V ReactNativeJS:V",
