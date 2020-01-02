@@ -3,6 +3,8 @@ import Player from '../renderers/Player';
 
 export var players = []; 
 export var flags = []; 
+export var map = {};
+
 const server = 'http://localhost:3000';
 var socket = io(server);
 
@@ -17,9 +19,13 @@ export var FindMatch = () => {
 
 export var JoinRoom = namespace => {
   socket = io(`${server}/${namespace}`);
+  socket.on('GAME_INIT', state => OnReceiveGameInit(state));
   socket.on('GAME_STATE', state => OnReceiveGameState(state));
 };
 
+export var OnReceiveGameInit = (new_map)=>{        
+    map = new_map;
+}
 export var OnReceiveGameState = (state)=>{        
     players = state.players;
     flags = state.flags;

@@ -25,7 +25,7 @@ export default class Player extends PureComponent {
       <View style={{left: x, top: y, height: radius * 2, width: radius * 2}}>
         <View style={{position:'absolute',width: '100%', height: '100%', borderRadius: radius, backgroundColor: 'yellow'}}/>
         <Stamina style={{left: radius - stamina_width / 2, top: -(stamina_height + stamina_margin_bottomm), width: stamina_width, height: stamina_height}} percentage={stamina_percentage} />
-        <View style={[styles.action_indicator, {left: action_x, top: action_y,borderRadius: action_radius ,width: action_radius*2, height: action_radius*2, opacity: this.props.action ? 0.5 : 0}]}/>
+        <View style={[styles.action_indicator, {left: action_x, top: action_y,borderRadius: action_radius ,width: action_radius*2, height: action_radius*2, opacity: this.props.action ? 0.2 : 0}]}/>
       </View>
     );
   }

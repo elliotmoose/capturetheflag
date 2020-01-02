@@ -48,6 +48,7 @@ import Images from './src/assets/Images';
 import {CameraSystem} from './src/systems/CameraSystem';
 import Map from './src/renderers/Map';
 import { FlagSystem } from './src/systems/FlagSystem';
+import { GameStateSystem } from './src/systems/GameStateSystem';
 
 const {width: SCREENWIDTH, height: SCREENHEIGHT} = Dimensions.get('window'); //landscape
 
@@ -101,12 +102,17 @@ var GetEntities = () => {
     renderer: Map,
   };
 
+  let game = {
+      state: 'GAME_BEGIN'//WAITING, GAME_BEGIN , IN_PROGRESS, GAME_END
+  }
+
   let entities = {
     map,    
     sprint_button,
     action_button,
     joystick,
     camera,
+    game
   };
 
   // for(let i=0;i<1;i++)
@@ -146,6 +152,7 @@ const App = () => {
         ControlsSystem,
         PlayerSystem,
         CameraSystem,
+        GameStateSystem
       ]}
       entities={entities}>
       <StatusBar hidden={true} />

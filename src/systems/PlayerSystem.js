@@ -41,7 +41,6 @@ export const PlayerSystem = (entities, {time}) => {
             timestamp: player.from_lerp_package.timestamp + time_since_from,
           };
 
-          console.log(time_since_from);
           //lets update the target position and time
           player.to_lerp_package = {
             position: updated_state_player.position,
