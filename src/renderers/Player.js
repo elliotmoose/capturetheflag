@@ -74,7 +74,7 @@ export default class Player extends PureComponent {
         const stamina_height = 14;
         const stamina_margin_bottomm = 12;
         
-        let shadow_radius = radius * 3/4;
+        let shadow_radius = radius / 2;
 
         return (
             <View style={{ position: 'absolute', left: x, top: y, height: radius * 2, width: radius * 2, zIndex: 500 }}>
@@ -89,7 +89,7 @@ export default class Player extends PureComponent {
                         width={radius*4}
                     />
                 </View>
-                {/* <View style={{position: 'absolute',left: radius-shadow_radius, bottom: -shadow_radius, width:shadow_radius*2, height: shadow_radius*2,borderRadius: shadow_radius, opacity: 0.3, transform:[{scaleX:2}], backgroundColor:'black', zIndex: 200}}></View> */}
+                <View style={{position: 'absolute',left: radius-shadow_radius, bottom: -shadow_radius, width:shadow_radius*2, height: shadow_radius*2,borderRadius: shadow_radius, opacity: 0.3, transform:[{scaleX:2}], backgroundColor:'black', zIndex: 200}}></View>
                 <Stamina style={{ left: radius - stamina_width / 2, top: -(stamina_height + stamina_margin_bottomm), width: stamina_width, height: stamina_height }} percentage={stamina_percentage} />
                 <View style={[styles.action_indicator, { left: action_x, top: action_y, borderRadius: action_radius, width: action_radius * 2, height: action_radius * 2, opacity: this.props.action ? 0.2 : 0 }]} />
             </View>
