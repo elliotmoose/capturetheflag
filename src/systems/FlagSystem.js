@@ -1,5 +1,7 @@
 import { players, flags } from "../managers/gamemanager";
 import Flag from "../renderers/Flag";
+import { Vector2Subtract, Vector2Magnitude } from "../helpers/Vectors";
+import { config } from "../managers/config";
 
 const Lerp = (from, to, progress) => {
     return from + (to-from) * progress;
@@ -32,7 +34,8 @@ export const FlagSystem = (entities, {time}) => {
                     //update the start point to current
                     flag.from_lerp_package = {
                         position: JSON.parse(JSON.stringify(flag.position)),
-                        timestamp: flag.from_lerp_package.timestamp + time_since_from
+                        // timestamp: flag.from_lerp_package.timestamp + time_since_from
+                        timestamp: flag.to_lerp_package.timestamp
                     }
                         
                     //lets update the target position and time
@@ -49,6 +52,11 @@ export const FlagSystem = (entities, {time}) => {
                 flag.lerp_progress = Math.min(1, flag.lerp_progress + time.delta/time_frame);
                 flag.position[0] = Lerp(flag.from_lerp_package.position[0], flag.to_lerp_package.position[0], flag.lerp_progress);
                 flag.position[1] = Lerp(flag.from_lerp_package.position[1], flag.to_lerp_package.position[1], flag.lerp_progress);                
+                
+                let gap = Vector2Magnitude(Vector2Subtract(flag.from_lerp_package.position, flag.to_lerp_package.position));
+                if(gap > config.LERP_THRESHOLD) {
+                    flag.lerp_progress = 1;
+                }                
             }
             else if (flag.from_lerp_package) { //mid init (to_lerp_package == null)
                 //lets update the target position and time
