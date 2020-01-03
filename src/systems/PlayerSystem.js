@@ -25,7 +25,7 @@ export const PlayerSystem = (entities, { time }) => {
             let player = entities[updated_state_player.id];
 
             //UPDATE ALL STATS
-            player.current_stamina = updated_state_player.current_stamina;
+            // player.current_stamina = updated_state_player.current_stamina;
             player.action = updated_state_player.action;
             player.radius = updated_state_player.radius;
             player.reach = updated_state_player.reach;
@@ -33,13 +33,15 @@ export const PlayerSystem = (entities, { time }) => {
             player.sprint = updated_state_player.sprint;            
 
             if (player.to_lerp_package && player.from_lerp_package) {
-                //the player's latest target position is not updated (aka we've received a new update)
-                if (player.to_lerp_package.position != updated_state_player.position) {
+                //the player's latest target position/stamina is not updated (aka we've received a new update)
+                if (player.to_lerp_package.position != updated_state_player.position ||
+                    player.to_lerp_package.current_stamina != updated_state_player.current_stamina) {
 
                     // let time_since_from = player.lerp_progress * (player.to_lerp_package.timestamp - player.from_lerp_package.timestamp);
                     //update the start point to current
                     player.from_lerp_package = {
                         position: JSON.parse(JSON.stringify(player.position)),
+                        current_stamina: player.current_stamina,
                         // timestamp: player.from_lerp_package.timestamp + time_since_from,
                         timestamp: player.to_lerp_package.timestamp,
                     };
@@ -47,6 +49,7 @@ export const PlayerSystem = (entities, { time }) => {
                     //lets update the target position and time
                     player.to_lerp_package = {
                         position: updated_state_player.position,
+                        current_stamina: updated_state_player.current_stamina,
                         timestamp: Date.now(),
                     };
 
@@ -58,6 +61,7 @@ export const PlayerSystem = (entities, { time }) => {
                 player.lerp_progress = Math.min(1, player.lerp_progress + (time.delta / time_frame));
                 player.position[0] = Lerp(player.from_lerp_package.position[0], player.to_lerp_package.position[0], player.lerp_progress);
                 player.position[1] = Lerp(player.from_lerp_package.position[1], player.to_lerp_package.position[1], player.lerp_progress);
+                player.current_stamina = Lerp(player.from_lerp_package.current_stamina, player.to_lerp_package.current_stamina, player.lerp_progress);
                 
                 let gap = Vector2Magnitude(Vector2Subtract(player.from_lerp_package.position, player.to_lerp_package.position));
                 if(gap > config.LERP_THRESHOLD) {
@@ -71,6 +75,7 @@ export const PlayerSystem = (entities, { time }) => {
                 //lets update the target position and time
                 player.to_lerp_package = {
                     position: updated_state_player.position,
+                    current_stamina: updated_state_player.current_stamina,
                     timestamp: Date.now(),
                 };
 
@@ -81,6 +86,7 @@ export const PlayerSystem = (entities, { time }) => {
                 //lets update the target position and time
                 player.from_lerp_package = {
                     position: updated_state_player.position,
+                    current_stamina: updated_state_player.current_stamina,
                     timestamp: Date.now(),
                 };
             }            
