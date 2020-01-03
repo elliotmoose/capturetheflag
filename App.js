@@ -9,7 +9,7 @@
 import React, { Component, useState } from 'react';
 // import {} from 'react-native-socketio'
 import { GameEngine } from 'react-native-game-engine';
-
+import { EventRegister } from 'react-native-event-listeners';
 import {
     SafeAreaView,
     StyleSheet,
@@ -52,7 +52,7 @@ import { FlagSystem } from './src/systems/FlagSystem';
 import { GameStateSystem } from './src/systems/GameStateSystem';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window'); //landscape
-
+const game_states = {MAIN_MENU:'MAIN_MENU', FIND_MATCH: 'FIND_MATCH', GAME_PLAY: 'GAME_PLAY'};
 
 var GetEntities = () => {
     let joystick = {
@@ -113,78 +113,97 @@ var GetEntities = () => {
         game
     };
 
-    // for(let i=0;i<1;i++)
-    // {
-    //     let player = players[i] || {
-    //         type: 'player',
-    //         position: [SCREENWIDTH/2, SCREENHEIGHT/2],
-    //         max_stamina: 100,
-    //         current_stamina: 100,
-    //         sprint_speed: 10,
-    //         default_speed: 4,
-    //         current_speed: 4,
-    //         renderer: Player
-    //     };
-
-    //     entities[`${i+2}`] = player;
-    // }
-
     return entities;
 };
 
 let entities = GetEntities();
 
-const RenderGame = () => {
-    return <GameEngine
-        style={styles.container}
-        systems={[
-            FlagSystem,
-            JoystickSystem,
-            ButtonsSystem,
-            ControlsSystem,
-            PlayerSystem,
-            CameraSystem,
-            GameStateSystem
-        ]}
-        entities={entities}>
-        <StatusBar hidden={true} />
-    </GameEngine>;
-}
 
-const RenderMenu = (setGameInProgress, ip_address, setIPAddress) => {    
-    return <View style={{flex: 1, backgroundColor: 'gray', justifyContent: 'center', alignItems: 'center'}}>
-        <TextInput style={{width: 300, height: 40, backgroundColor: 'white', borderRadius: 12, marginBottom: 12, paddingLeft: 16}} onChangeText={(text)=>{
-            setIPAddress(text);
-        }}>
-            {ip_address}
-        </TextInput>
-        <TouchableOpacity style={{width: 300, height: 40, backgroundColor: '#3cc969', borderRadius: 12, justifyContent: 'center', alignItems: 'center'}} 
-        onPress={()=>{
-            InitializeSocketIO(ip_address);
-            FindMatch();
-            setGameInProgress(true);
-        }}>
-            <Text style={{fontWeight: '500', fontSize: 16, color:'white'}}>
-                FIND MATCH
-            </Text>
-        </TouchableOpacity>
-    </View>
-}
-
-let sprite = null;
-const App = () => {
-    console.disableYellowBox = true;
+export default class App extends Component {
     
-    // const [ip_address, setIPAddress] = useState('http://mooselliot.com:3000');
-    const [ip_address, setIPAddress] = useState('http://localhost:3000');
-    const [game_in_progress, setGameInProgress] = useState(false);
-
-    if(game_in_progress) {
-        return RenderGame();
+    state = {
+        ip_address: 'http://localhost:3000',
+        game_state: game_states.MAIN_MENU,
+        current_players: 0,
+        max_players: 0
     }
-    else {
-        return RenderMenu(setGameInProgress, ip_address, setIPAddress);
-    }     
+
+    componentDidMount() {
+        console.disableYellowBox = true;
+    }
+
+    componentWillMount() {
+        this.find_match_event_listener = EventRegister.on('FIND_MATCH_UPDATE', ({current_players, max_players}) => this.setState({current_players, max_players})); //update waiting screen
+        this.join_room_event_listener = EventRegister.on('JOIN_ROOM_CONFIRMED', ()=>this.setState({game_state: game_states.GAME_PLAY})); //start game when join room triggered
+    }
+    componentWillUnmount() {
+        EventRegister.removeEventListener(this.find_match_event_listener);
+        EventRegister.removeEventListener(this.join_room_event_listener);
+    }
+    
+    renderGame() {
+        return <GameEngine
+            style={styles.container}
+            systems={[
+                FlagSystem,
+                JoystickSystem,
+                ButtonsSystem,
+                ControlsSystem,
+                PlayerSystem,
+                CameraSystem,
+                GameStateSystem
+            ]}
+            entities={entities}>
+            <StatusBar hidden={true} />
+        </GameEngine>;
+    }
+    
+    renderMainMenu() {
+        return <View style={{ flex: 1, backgroundColor: 'gray', justifyContent: 'center', alignItems: 'center' }}>
+            <TextInput style={{ width: 300, height: 40, backgroundColor: 'white', borderRadius: 12, marginBottom: 12, paddingLeft: 16 }} onChangeText={(text) => {
+                this.setState({ip_address: text});                
+            }}>
+                {this.state.ip_address}
+            </TextInput>
+            <TouchableOpacity style={{ width: 300, height: 40, backgroundColor: '#3cc969', borderRadius: 12, justifyContent: 'center', alignItems: 'center' }}
+                onPress={() => {
+                    InitializeSocketIO(this.state.ip_address);
+                    FindMatch();
+                    this.setState({game_state: game_states.FIND_MATCH});
+                }}>
+                <Text style={{ fontWeight: '500', fontSize: 16, color: 'white' }}>
+                    FIND MATCH
+            </Text>
+            </TouchableOpacity>
+        </View>
+    }
+
+    renderFindMatch() {
+        return <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Text>
+                Finding Match... {this.state.current_players}/{this.state.max_players}
+            </Text>
+        </View>
+    }
+
+    render() {
+        // const [ip_address, setIPAddress] = useState('http://mooselliot.com:3000');        
+
+        switch (this.state.game_state) {
+            case game_states.MAIN_MENU:
+                return this.renderMainMenu();
+
+            case game_states.FIND_MATCH:
+                return this.renderFindMatch();
+                // return RenderFindingMatch(setGameState);
+
+            case game_states.GAME_PLAY:
+                return this.renderGame();
+
+            default:            
+                return this.renderMainMenu();
+        }    
+    }
 };
 
 const styles = StyleSheet.create({
@@ -194,4 +213,3 @@ const styles = StyleSheet.create({
     },
 });
 
-export default App;

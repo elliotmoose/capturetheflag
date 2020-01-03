@@ -1,5 +1,6 @@
 import io from 'socket.io-client';
 import Player from '../renderers/Player';
+import { EventRegister } from 'react-native-event-listeners';
 
 export var players = [];
 export var flags = [];
@@ -16,6 +17,7 @@ export var InitializeSocketIO = (target_server) => {
     socket = io(server);
     socket.on('connect', () => console.log('connected to lobby'));
     socket.on('JOIN_ROOM_CONFIRMED', namespace => JoinRoom(namespace));
+    socket.on('FIND_MATCH_UPDATE', ({current_players, max_players}) => OnReceiveFindMatchUpdate(current_players, max_players));
 };
 
 export var FindMatch = () => {
@@ -24,11 +26,17 @@ export var FindMatch = () => {
     }
 };
 
+export var OnReceiveFindMatchUpdate = (current_players, max_players) => {
+    EventRegister.emit('FIND_MATCH_UPDATE', {current_players, max_players});
+}
+
+
 export var JoinRoom = namespace => {
     socket = io(`${server}/${namespace}`);
     socket.on('BIND_PLAYER', id => OnReceivePlayerBind(id));
     socket.on('INIT_MAP', state => OnReceiveGameMap(state));
     socket.on('GAME_STATE', state => OnReceiveGameState(state));
+    EventRegister.emit('JOIN_ROOM_CONFIRMED');
 };
 
 export var OnReceivePlayerBind = (id) => {

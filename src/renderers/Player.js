@@ -72,7 +72,7 @@ export default class Player extends PureComponent {
 
         const stamina_width = 80;
         const stamina_height = 14;
-        const stamina_margin_bottomm = 12;
+        const stamina_margin_bottomm = 24;
         
         let shadow_radius = radius / 2;
 
