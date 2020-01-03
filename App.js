@@ -171,13 +171,14 @@ const RenderMenu = (setGameInProgress, ip_address, setIPAddress) => {
     </View>
 }
 
+let sprite = null;
 const App = () => {
     console.disableYellowBox = true;
     
-    const [ip_address, setIPAddress] = useState('http://mooselliot.com:3000');
+    // const [ip_address, setIPAddress] = useState('http://mooselliot.com:3000');
+    const [ip_address, setIPAddress] = useState('http://localhost:3000');
     const [game_in_progress, setGameInProgress] = useState(false);
-    // console.log(`players ${players}`);
-    // console.log(entities);
+
     if(game_in_progress) {
         return RenderGame();
     }
