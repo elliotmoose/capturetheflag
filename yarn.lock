@@ -5246,6 +5246,13 @@ react-is@^16.8.1, react-is@^16.8.4, react-is@^16.9.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.10.2.tgz#984120fd4d16800e9a738208ab1fba422d23b5ab"
   integrity sha512-INBT1QEgtcCCgvccr5/86CfD71fw9EPmDxgiJX4I2Ddr6ZsV6iFXsuby+qWJPtmNuMY0zByTsG4468P7nHuNWA==
 
+react-native-event-listeners@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-event-listeners/-/react-native-event-listeners-1.0.3.tgz#8e210491b0eab8f714317a0f8c2d322bb2036268"
+  integrity sha1-jiEEkbDquPcUMXoPjC0yK7IDYmg=
+  dependencies:
+    type-detect "4.0.3"
+
 react-native-game-engine@^0.12.3:
   version "0.12.3"
   resolved "https://registry.yarnpkg.com/react-native-game-engine/-/react-native-game-engine-0.12.3.tgz#168c5ce60565694a928f7179eba81494eac7a38f"
@@ -5564,6 +5571,11 @@ rimraf@~2.2.6:
   version "2.2.8"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.2.8.tgz#e439be2aaee327321952730f99a8929e4fc50582"
   integrity sha1-5Dm+Kq7jJzIZUnMPmaiSnk/FBYI=
+
+rn-sprite-sheet@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/rn-sprite-sheet/-/rn-sprite-sheet-1.1.5.tgz#6e65cbdd71891b8e3d83ecc89a6e3bdcc3a5770d"
+  integrity sha512-dzOTyyrrr+8gna+Cv7+lzTJIioXsO0j+EB4EzhNPMIPEG+LGZ1xKmy4dH5Bg7oLMBX616h8pdoPyMRFUeyxWrg==
 
 rsvp@^4.8.4:
   version "4.8.5"
@@ -6279,6 +6291,11 @@ type-check@~0.3.2:
   integrity sha1-WITKtRLPHTVeP7eE8wgEsrUg23I=
   dependencies:
     prelude-ls "~1.1.2"
+
+type-detect@4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/type-detect/-/type-detect-4.0.3.tgz#0e3f2670b44099b0b46c284d136a7ef49c74c2ea"
+  integrity sha1-Dj8mcLRAmbC0bChNE2p+9Jx0wuo=
 
 type-fest@^0.7.1:
   version "0.7.1"

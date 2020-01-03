@@ -30,6 +30,7 @@ export const PlayerSystem = (entities, { time }) => {
             player.radius = updated_state_player.radius;
             player.reach = updated_state_player.reach;
             player.prison = updated_state_player.prison;
+            player.angle = updated_state_player.angle;            
             player.sprint = updated_state_player.sprint;            
 
             if (player.to_lerp_package && player.from_lerp_package) {
