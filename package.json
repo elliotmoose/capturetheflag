@@ -26,6 +26,7 @@
     "react": "16.9.0",
     "react-native": "0.61.2",
     "react-native-game-engine": "^0.12.3",
+    "rn-sprite-sheet": "^1.1.5",
     "socket.io-client": "^2.3.0"
   },
   "devDependencies": {
