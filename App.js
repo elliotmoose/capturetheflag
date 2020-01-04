@@ -111,7 +111,7 @@ var GetEntities = () => {
     }
 
     let minimap = {
-        width: 10,
+        width: 10, // Width and Height props hold the dimensions of the actual game map not the minimap
         height: 10,
         players: [],
         flags: [],
