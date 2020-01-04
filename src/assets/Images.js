@@ -1,4 +1,5 @@
 const Images = {
+    menu_background : require('./menu_background.png'),
     map : require('./map.png'),
     flag_green : require('./flag_green.png'),
     flag_red : require('./flag_red.png'),

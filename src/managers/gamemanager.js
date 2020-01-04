@@ -36,8 +36,24 @@ export var JoinRoom = namespace => {
     socket.on('BIND_PLAYER', id => OnReceivePlayerBind(id));
     socket.on('INIT_MAP', state => OnReceiveGameMap(state));
     socket.on('GAME_STATE', state => OnReceiveGameState(state));
+    socket.on('PING', ()=> OnReceivePing());
     EventRegister.emit('JOIN_ROOM_CONFIRMED');
 };
+
+let last_ping_date = Date.now();
+export let ping = 0;
+
+export var Ping = ()=>{
+    if(socket) {
+        last_ping_date = Date.now();
+        socket.emit('PING');
+    }
+}
+
+export var OnReceivePing = ()=>{
+    ping = Date.now() - last_ping_date;
+}
+
 
 export var OnReceivePlayerBind = (id) => {
     player_id = id;

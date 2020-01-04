@@ -50,6 +50,8 @@ import { CameraSystem } from './src/systems/CameraSystem';
 import Map from './src/renderers/Map';
 import { FlagSystem } from './src/systems/FlagSystem';
 import { GameStateSystem } from './src/systems/GameStateSystem';
+import { PerformanceSystem } from './src/systems/PerformanceSystem';
+import Performance from './src/renderers/Performance';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window'); //landscape
 const game_states = {MAIN_MENU:'MAIN_MENU', FIND_MATCH: 'FIND_MATCH', GAME_PLAY: 'GAME_PLAY'};
@@ -104,13 +106,18 @@ var GetEntities = () => {
         state: 'GAME_BEGIN'//WAITING, GAME_BEGIN , IN_PROGRESS, GAME_END
     }
 
+    let performance = {
+        renderer: Performance
+    }
+
     let entities = {
         map,
         sprint_button,
         action_button,
         joystick,
         camera,
-        game
+        game,
+        performance
     };
 
     return entities;
@@ -151,7 +158,8 @@ export default class App extends Component {
                 ControlsSystem,
                 PlayerSystem,
                 CameraSystem,
-                GameStateSystem
+                GameStateSystem,
+                PerformanceSystem
             ]}
             entities={entities}>
             <StatusBar hidden={true} />
@@ -160,11 +168,13 @@ export default class App extends Component {
     
     renderMainMenu() {
         return <View style={{ flex: 1, backgroundColor: 'gray', justifyContent: 'center', alignItems: 'center' }}>
-            <TextInput style={{ width: 300, height: 40, backgroundColor: 'white', borderRadius: 12, marginBottom: 12, paddingLeft: 16 }} onChangeText={(text) => {
+            <Image source={Images.menu_background} resizeMode='cover' style={{position: 'absolute', width: '100%', height: '100%'}}/>
+            <Image source={Images.flag} style={{width: 400, height: '50%'}} resizeMode='contain'/>
+            {/* <TextInput style={{ width: 300, height: 40, backgroundColor: 'white', borderRadius: 12, marginBottom: 12, paddingLeft: 16 }} onChangeText={(text) => {
                 this.setState({ip_address: text});                
             }}>
                 {this.state.ip_address}
-            </TextInput>
+            </TextInput> */}
             <TouchableOpacity style={{ width: 300, height: 40, backgroundColor: '#3cc969', borderRadius: 12, justifyContent: 'center', alignItems: 'center' }}
                 onPress={() => {
                     InitializeSocketIO(this.state.ip_address);
