@@ -140,10 +140,11 @@ let entities = GetEntities();
 export default class App extends Component {
     
     state = {
-        ip_address: 'http://localhost:3000',
         game_state: game_states.MAIN_MENU,
         current_players: 0,
-        max_players: 0
+        max_players: 0,
+        game_modes: ["LOCAL", "SERVER", "CUSTOM", "NORMAL", "RANKED"],
+        current_game_mode_index: 0
     }
 
     componentDidMount() {
@@ -177,26 +178,53 @@ export default class App extends Component {
             <StatusBar hidden={true} />
         </GameEngine>;
     }
+
+    offsetGameMode(offset) {
+        let new_index = this.state.current_game_mode_index+offset;
+        if(new_index == -1) {
+            new_index = this.state.game_modes.length-1;
+        }
+
+        this.setState({current_game_mode_index: new_index % this.state.game_modes.length});
+    }
+
+    findMatch() {
+        let ip = this.state.current_game_mode_index == 0 ? 'http://localhost:3000' : 'http://mooselliot.com:3000';
+        InitializeSocketIO(ip);
+        FindMatch();
+        this.setState({game_state: game_states.FIND_MATCH});
+    }
     
     renderMainMenu() {
         return <View style={{ flex: 1, backgroundColor: 'gray', justifyContent: 'center', alignItems: 'center' }}>
             <Image source={Images.menu_background} resizeMode='cover' style={{position: 'absolute', width: '100%', height: '100%'}}/>
-            <Image source={Images.flag} style={{width: 400, height: '50%'}} resizeMode='contain'/>
-            <TextInput style={{ width: 300, height: 40, backgroundColor: 'white', borderRadius: 12, marginBottom: 12, paddingLeft: 16 }} onChangeText={(text) => {
-                this.setState({ip_address: text});                
-            }}>
-                {this.state.ip_address}
-            </TextInput>
-            <TouchableOpacity style={{ width: 300, height: 40, backgroundColor: '#3cc969', borderRadius: 12, justifyContent: 'center', alignItems: 'center' }}
-                onPress={() => {
-                    InitializeSocketIO(this.state.ip_address);
-                    FindMatch();
-                    this.setState({game_state: game_states.FIND_MATCH});
-                }}>
-                <Text style={{ fontWeight: '500', fontSize: 16, color: 'white' }}>
-                    FIND MATCH
-            </Text>
-            </TouchableOpacity>
+            <View style={{marginTop: 22, width: 300, height: 80}}>
+                <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 44, textAlign: 'center', color: 'black', position: 'absolute', left: 6, top: 6, width: 300}}>
+                    CAPTURE THE{'\n'}FLAG
+                </Text>
+                <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 44, textAlign: 'center', color: 'white', position: 'absolute', width: 300}}>
+                    CAPTURE THE{'\n'}FLAG
+                </Text>
+            </View>
+            <Image source={Images.flag} style={{width: 400, flex: 1, marginBottom: 12, marginLeft: 8}} resizeMode='contain'/>            
+            <View style={{height: 40, flexDirection: 'row', alignItems: 'center', marginLeft: 40, marginRight: 40, marginBottom: 25 }}>
+                <TouchableOpacity style={{height: 40}} onPress={()=>this.offsetGameMode(-1)}>
+                    <Image source={Images.arrow_right} resizeMode='contain'  style={{flex: 1, transform:[{rotateY: '180deg'}]}}/>                        
+                </TouchableOpacity>
+                <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 26, textAlign: 'center', color: 'white', width: 120}}>
+                    {this.state.game_modes[this.state.current_game_mode_index]}
+                </Text>
+                <TouchableOpacity style={{height: 40}} onPress={()=>this.offsetGameMode(1)}>
+                    <Image source={Images.arrow_right} resizeMode='contain' style={{flex: 1}}/>                        
+                </TouchableOpacity>
+                <View style={{width: 50}}/>
+                <TouchableOpacity style={{ width: 260, height: 40, backgroundColor: '#3cc969', borderRadius: 12, justifyContent: 'center', alignItems: 'center'}}
+                    onPress={() => this.findMatch()}>
+                    <Text style={{ fontWeight: '500', fontSize: 18, paddingTop: 4, color: 'white', fontFamily: 'Endless Boss Battle' }}>
+                        FIND MATCH
+                </Text>
+                </TouchableOpacity>
+            </View>
         </View>
     }
 
@@ -209,15 +237,12 @@ export default class App extends Component {
     }
 
     render() {
-        // const [ip_address, setIPAddress] = useState('http://mooselliot.com:3000');        
-
         switch (this.state.game_state) {
             case game_states.MAIN_MENU:
                 return this.renderMainMenu();
 
             case game_states.FIND_MATCH:
                 return this.renderFindMatch();
-                // return RenderFindingMatch(setGameState);
 
             case game_states.GAME_PLAY:
                 return this.renderGame();

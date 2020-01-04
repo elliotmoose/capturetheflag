@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* capturetheflagTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* capturetheflagTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -20,6 +19,7 @@
 		CEA39B98B2C7F27D3DDD29B2 /* libPods-capturetheflag-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F203E3ABA5090582D0D4164C /* libPods-capturetheflag-tvOSTests.a */; };
 		DA71DCD5568EA2D487A1F2AA /* libPods-capturetheflagTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC4CB2E278DBFE2572B5FE60 /* libPods-capturetheflagTests.a */; };
 		EE288546C277998AF39CCC43 /* libPods-capturetheflag.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B89B006FBE0084AA18742371 /* libPods-capturetheflag.a */; };
+		B6CEA9C98FA74439A37B360B /* EndlessBossBattleRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B2854F2484D846BD9B5C04E1 /* EndlessBossBattleRegular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +67,7 @@
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F203E3ABA5090582D0D4164C /* libPods-capturetheflag-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-capturetheflag-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9A37B6381F6B6ED8F6294FA /* Pods-capturetheflag-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-capturetheflag-tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-capturetheflag-tvOSTests/Pods-capturetheflag-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B2854F2484D846BD9B5C04E1 /* EndlessBossBattleRegular.ttf */ = {isa = PBXFileReference; name = "EndlessBossBattleRegular.ttf"; path = "../src/assets/fonts/EndlessBossBattleRegular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +181,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				091DB22AA79F1730F5B7AF47 /* Pods */,
+				AC8BE67C9DD9420ABF2BA07C /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -196,6 +198,15 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		AC8BE67C9DD9420ABF2BA07C /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				B2854F2484D846BD9B5C04E1 /* EndlessBossBattleRegular.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -284,7 +295,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 940;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -342,6 +353,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				B6CEA9C98FA74439A37B360B /* EndlessBossBattleRegular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
