@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import {View, Image, ImageBackground } from "react-native";
 import { Colors } from "../constants/Colors";
 import Images from "../assets/Images";
+import { player_id } from "../managers/gamemanager";
 
 const FLAG_SCALE_FACTOR = 3 //Flags appear too small if we follow the main game scale. This factor helps to mitigate that
  
@@ -10,10 +11,17 @@ export default class Minimap extends PureComponent {
     renderPlayers(scale) {
         return this.props.players.map(player => {
 
-            let newRadius = player.radius * scale
-            let newTop = player.position[1] * scale - newRadius
-            let newLeft = player.position[0] * scale - newRadius
-            let playerColor = (player.team==0) ? Colors.lime_green : Colors.red
+            let newRadius = player.radius * scale;
+            let newTop = player.position[1] * scale - newRadius;
+            let newLeft = player.position[0] * scale - newRadius;
+            let playerColor;
+
+            if (player.id == player_id) {
+                playerColor = "yellow";
+            } else {
+                playerColor = (player.team==0) ? Colors.lime_green : Colors.red;
+            }
+            
 
             return <View style={[{height: newRadius * 2, width: newRadius * 2, borderRadius: newRadius,
                 top: newTop, left: newLeft,
