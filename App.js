@@ -50,6 +50,7 @@ import { CameraSystem } from './src/systems/CameraSystem';
 import Map from './src/renderers/Map';
 import { FlagSystem } from './src/systems/FlagSystem';
 import { GameStateSystem } from './src/systems/GameStateSystem';
+import Minimap from './src/renderers/Minimap';
 import { PerformanceSystem } from './src/systems/PerformanceSystem';
 import Performance from './src/renderers/Performance';
 import Scoreboard from './src/renderers/Scoreboard';
@@ -108,6 +109,14 @@ var GetEntities = () => {
         state: 'GAME_BEGIN'//WAITING, GAME_BEGIN , IN_PROGRESS, GAME_END
     }
 
+    let minimap = {
+        width: 10,
+        height: 10,
+        players: [],
+        flags: [],
+        renderer: Minimap,
+    }
+
     let performance = {
         renderer: Performance
     }
@@ -127,6 +136,7 @@ var GetEntities = () => {
         game,
         performance,
         scoreboard
+        minimap,
     };
 
     return entities;
@@ -171,6 +181,7 @@ export default class App extends Component {
                 GameStateSystem,
                 PerformanceSystem,
                 ScoreboardSystem
+                MinimapSystem
             ]}
             entities={entities}>
             <StatusBar hidden={true} />
