@@ -11,8 +11,9 @@ export default class Minimap extends PureComponent {
             let newRadius = player.radius * scale
             let newTop = player.position[1] * scale - newRadius
             let newLeft = player.position[0] * scale - newRadius
+            let playerStyle = (player.team==0) ? styles.player_0 : styles.player_1
 
-            return <View style={[styles.player_0, 
+            return <View style={[playerStyle, 
                 {height: newRadius * 2, width: newRadius * 2, borderRadius: newRadius,
                 top: newTop, left: newLeft}]}/>
         })
