@@ -16,9 +16,7 @@ export default class Map extends PureComponent {
 }
  
 const styles = StyleSheet.create({
-  container: {
-    width: 1500,
-    height: 2500,    
+  container: { 
     position: "absolute",
     padding: 0,
   }

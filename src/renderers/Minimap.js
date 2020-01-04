@@ -1,24 +1,52 @@
 import React, { PureComponent } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 
-const SCALE = 0.1;
+const {width: SCREENWIDTH, height: SCREENHEIGHT} = Dimensions.get('window'); //landscape
  
 export default class Minimap extends PureComponent {
-  render() {
-    return (
-        <View style={styles.container}></View>          
-    );
+
+    renderPlayers(scale) {
+        return this.props.players.map(player => {
+
+            let newRadius = player.radius * scale
+            let newTop = player.position[1] * scale - newRadius
+            let newLeft = player.position[0] * scale - newRadius
+
+            return <View style={[styles.player_0, 
+                {height: newRadius * 2, width: newRadius * 2, borderRadius: newRadius,
+                top: newTop, left: newLeft}]}/>
+        })
+    }
+
+    render() {
+        let SCALE = SCREENHEIGHT / 2 / this.props.height;
+        return (
+            <View style={[styles.container, {height: this.props.height * SCALE, width: this.props.width * SCALE}]} >
+                {this.renderPlayers(SCALE)}
+            </View>
+        );
   }
 }
  
 const styles = StyleSheet.create({
   container: {
-    width: 1500 * SCALE,
-    height: 2500 * SCALE,
-    borderColor: "#FFF",
     backgroundColor: "#FFF",
     position: "absolute",
-    top: 0,
-    left: 0,
+    top: 10,
+    left: 10,
+  },
+  player_0: {
+    backgroundColor: "#F00",
+    position: "absolute"
+  },
+  player_1: {
+    backgroundColor: "#00F",
+    position: "absolute"
+  },
+  flag_0: {
+
+  },
+  flag_1: {
+
   }
 });
