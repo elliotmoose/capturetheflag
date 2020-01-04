@@ -3,6 +3,7 @@ const Images = {
     map : require('./map.png'),
     flag_green : require('./flag_green.png'),
     flag_red : require('./flag_red.png'),
+    arrow_right : require('./arrow_right.png'),
     character_up : require('./character/default/character_up.png'),
     character_upleft : require('./character/default/character_upleft.png'),
     character_upright : require('./character/default/character_upright.png'),
