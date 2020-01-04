@@ -1,11 +1,8 @@
 import React, { PureComponent } from "react";
-import { StyleSheet, View, Dimensions, Image } from "react-native";
+import {View, Image, ImageBackground } from "react-native";
 import { Colors } from "../constants/Colors";
 import Images from "../assets/Images";
 
-const {width: SCREENWIDTH, height: SCREENHEIGHT} = Dimensions.get('window'); //landscape
-
-const SCREEN_SCALE = 0.5 //Ratio of height of minimap to height of screen
 const FLAG_SCALE_FACTOR = 3 //Flags appear too small if we follow the main game scale. This factor helps to mitigate that
  
 export default class Minimap extends PureComponent {
@@ -47,24 +44,46 @@ export default class Minimap extends PureComponent {
         })
     }
 
+    renderBases(scale) {
+        return this.props.bases.map(base => {
+
+            let newRadius = base.radius * scale
+            let newTop = base.position[1] * scale - newRadius
+            let newLeft = base.position[0] * scale - newRadius
+
+            return <View 
+                style={{
+                    position: "absolute",
+                    height: newRadius * 2,
+                    width: newRadius * 2,
+                    borderRadius: newRadius,
+                    top: newTop,
+                    left: newLeft,
+                    backgroundColor: "gray",
+                    opacity: 0.5
+                }}/>
+        })
+    }
+
 
 
     render() {
-        let scale = SCREENHEIGHT * SCREEN_SCALE / this.props.height; //Actual scaling ratio of minimap to real game. Different from SCREEN_SCALE
+        
         return (
-            <View style={[styles.container, {height: this.props.height * scale, width: this.props.width * scale}]} >
-                {this.renderPlayers(scale)}
-                {this.renderFlags(scale)}
-            </View>
+            <ImageBackground 
+                source={Images.map}
+                resizeMode="cover"
+                style={{
+                    position: "absolute",
+                    height: this.props.height,
+                    width: this.props.width,
+                    top: this.props.offset[1],
+                    left: this.props.offset[0],
+                }} >
+                {this.renderPlayers(this.props.scale)}
+                {this.renderFlags(this.props.scale)}
+                {this.renderBases(this.props.scale)}
+            </ImageBackground>
         );
   }
 }
- 
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "#FFF",
-        position: "absolute",
-        top: 10,
-        left: 10,
-    }
-});

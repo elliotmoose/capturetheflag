@@ -111,10 +111,15 @@ var GetEntities = () => {
     }
 
     let minimap = {
-        width: 10, // Width and Height props hold the dimensions of the actual game map not the minimap
-        height: 10,
+        bases: [],
         players: [],
         flags: [],
+        offset: [10,10], //Minimap position offset. User can drag minimap to change this.
+        touch_id: null,
+        touch_offset: [0,0],
+        scale: 0, //size of minimap to size of actual game
+        height: 0,
+        width: 0,
         renderer: Minimap,
     }
 
