@@ -55,6 +55,7 @@ import { PerformanceSystem } from './src/systems/PerformanceSystem';
 import Performance from './src/renderers/Performance';
 import Scoreboard from './src/renderers/Scoreboard';
 import { ScoreboardSystem } from './src/systems/ScoreboardSystem';
+import { MinimapSystem } from './src/systems/MinimapSystem';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window'); //landscape
 const game_states = {MAIN_MENU:'MAIN_MENU', FIND_MATCH: 'FIND_MATCH', GAME_PLAY: 'GAME_PLAY'};
@@ -135,7 +136,7 @@ var GetEntities = () => {
         camera,
         game,
         performance,
-        scoreboard
+        scoreboard,
         minimap,
     };
 
@@ -180,7 +181,7 @@ export default class App extends Component {
                 CameraSystem,
                 GameStateSystem,
                 PerformanceSystem,
-                ScoreboardSystem
+                ScoreboardSystem,
                 MinimapSystem
             ]}
             entities={entities}>
