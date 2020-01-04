@@ -67,7 +67,6 @@ export var OnReceiveGameMap = (new_map) => {
 }
 
 export var OnReceiveGameStart = (start_time) => {
-    console.log('game_start');
     scoreboard.start_time = start_time;    
 }
 
