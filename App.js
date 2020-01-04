@@ -170,11 +170,11 @@ export default class App extends Component {
         return <View style={{ flex: 1, backgroundColor: 'gray', justifyContent: 'center', alignItems: 'center' }}>
             <Image source={Images.menu_background} resizeMode='cover' style={{position: 'absolute', width: '100%', height: '100%'}}/>
             <Image source={Images.flag} style={{width: 400, height: '50%'}} resizeMode='contain'/>
-            {/* <TextInput style={{ width: 300, height: 40, backgroundColor: 'white', borderRadius: 12, marginBottom: 12, paddingLeft: 16 }} onChangeText={(text) => {
+            <TextInput style={{ width: 300, height: 40, backgroundColor: 'white', borderRadius: 12, marginBottom: 12, paddingLeft: 16 }} onChangeText={(text) => {
                 this.setState({ip_address: text});                
             }}>
                 {this.state.ip_address}
-            </TextInput> */}
+            </TextInput>
             <TouchableOpacity style={{ width: 300, height: 40, backgroundColor: '#3cc969', borderRadius: 12, justifyContent: 'center', alignItems: 'center' }}
                 onPress={() => {
                     InitializeSocketIO(this.state.ip_address);
