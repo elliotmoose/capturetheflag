@@ -50,6 +50,7 @@ import { CameraSystem } from './src/systems/CameraSystem';
 import Map from './src/renderers/Map';
 import { FlagSystem } from './src/systems/FlagSystem';
 import { GameStateSystem } from './src/systems/GameStateSystem';
+import Minimap from './src/renderers/Minimap';
 import { PerformanceSystem } from './src/systems/PerformanceSystem';
 import Performance from './src/renderers/Performance';
 
@@ -106,6 +107,10 @@ var GetEntities = () => {
         state: 'GAME_BEGIN'//WAITING, GAME_BEGIN , IN_PROGRESS, GAME_END
     }
 
+    let minimap = {
+        renderer: Minimap,
+    }
+
     let performance = {
         renderer: Performance
     }
@@ -116,6 +121,8 @@ var GetEntities = () => {
         action_button,
         joystick,
         camera,
+        game,
+        minimap,
         game,
         performance
     };
