@@ -4,6 +4,10 @@ import { EventRegister } from 'react-native-event-listeners';
 
 export var players = [];
 export var flags = [];
+export var scoreboard = {
+    score: [],
+    start_time: 0
+}
 export var map = {};
 export var player_id = null;
 
@@ -36,6 +40,7 @@ export var JoinRoom = namespace => {
     socket.on('BIND_PLAYER', id => OnReceivePlayerBind(id));
     socket.on('INIT_MAP', state => OnReceiveGameMap(state));
     socket.on('GAME_STATE', state => OnReceiveGameState(state));
+    socket.on('GAME_START', start_time => OnReceiveGameStart(start_time));
     socket.on('PING', ()=> OnReceivePing());
     EventRegister.emit('JOIN_ROOM_CONFIRMED');
 };
@@ -54,16 +59,22 @@ export var OnReceivePing = ()=>{
     ping = Date.now() - last_ping_date;
 }
 
-
 export var OnReceivePlayerBind = (id) => {
     player_id = id;
 }
 export var OnReceiveGameMap = (new_map) => {
     map = new_map;
 }
+
+export var OnReceiveGameStart = (start_time) => {
+    console.log('game_start');
+    scoreboard.start_time = start_time;    
+}
+
 export var OnReceiveGameState = (state) => {
     players = state.players;
     flags = state.flags;
+    scoreboard.score = state.score;
 }
 
 export var SendControls = controls => {

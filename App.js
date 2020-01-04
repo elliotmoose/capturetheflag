@@ -52,6 +52,8 @@ import { FlagSystem } from './src/systems/FlagSystem';
 import { GameStateSystem } from './src/systems/GameStateSystem';
 import { PerformanceSystem } from './src/systems/PerformanceSystem';
 import Performance from './src/renderers/Performance';
+import Scoreboard from './src/renderers/Scoreboard';
+import { ScoreboardSystem } from './src/systems/ScoreboardSystem';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window'); //landscape
 const game_states = {MAIN_MENU:'MAIN_MENU', FIND_MATCH: 'FIND_MATCH', GAME_PLAY: 'GAME_PLAY'};
@@ -110,6 +112,12 @@ var GetEntities = () => {
         renderer: Performance
     }
 
+    let scoreboard = {
+        score: [0,0],
+        time: '3:00',
+        renderer: Scoreboard
+    }
+
     let entities = {
         map,
         sprint_button,
@@ -117,7 +125,8 @@ var GetEntities = () => {
         joystick,
         camera,
         game,
-        performance
+        performance,
+        scoreboard
     };
 
     return entities;
@@ -160,7 +169,8 @@ export default class App extends Component {
                 PlayerSystem,
                 CameraSystem,
                 GameStateSystem,
-                PerformanceSystem
+                PerformanceSystem,
+                ScoreboardSystem
             ]}
             entities={entities}>
             <StatusBar hidden={true} />
