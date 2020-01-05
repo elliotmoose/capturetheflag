@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { StyleSheet, View } from "react-native";
+import { UI } from "../../constants/UIConstants";
  
 export default class Button extends PureComponent {
   render() {
@@ -20,6 +21,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     padding: 0,
     opacity: 0.7,
-    zIndex: 999
+    zIndex: UI.controls.zIndex
   }
 });

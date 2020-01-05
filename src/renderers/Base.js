@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { StyleSheet, View } from "react-native";
+import { UI } from "../constants/UIConstants";
  
 export default class Base extends PureComponent {
   render() {
@@ -19,7 +20,7 @@ const styles = StyleSheet.create({
     backgroundColor: "gray",
     position: "absolute",
     padding: 0,
-    zIndex: 300,
+    zIndex: UI.base.zIndex,
     opacity: 0.5    
   }
 });

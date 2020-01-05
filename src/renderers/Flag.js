@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import { StyleSheet, View, Image } from "react-native";
 import Images from "../assets/Images";
+import { UI } from "../constants/UIConstants";
  
 export default class Flag extends PureComponent {
   render() {
@@ -19,6 +20,6 @@ const styles = StyleSheet.create({
   container: {        
     position: "absolute",
     padding: 0,
-    zIndex: 600
+    zIndex: UI.flag.zIndex
   }
 });

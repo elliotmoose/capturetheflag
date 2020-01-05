@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Colors } from "../constants/Colors";
+import { UI } from "../constants/UIConstants";
 
 
 export default class Scoreboard extends PureComponent {
@@ -24,6 +25,6 @@ export default class Scoreboard extends PureComponent {
 const styles = StyleSheet.create({
     container: {
         position: "absolute",
-        zIndex: 999
+        zIndex: UI.controls.zIndex
     }
 });

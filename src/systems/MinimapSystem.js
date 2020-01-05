@@ -1,14 +1,14 @@
 import { players, flags, map } from "../managers/gamemanager"
 import { Dimensions } from "react-native";
 import { Vector2Subtract } from "../helpers/Vectors"
+import { UI } from "../constants/UIConstants";
 
 const {width: SCREENWIDTH, height: SCREENHEIGHT} = Dimensions.get('window'); //landscape
-const SCREEN_SCALE = 0.5; //Ratio of height of minimap to height of screen
 
 export const MinimapSystem = (entities, {touches}) => {
   
   if (map.bounds) {
-    let scale = SCREENHEIGHT * SCREEN_SCALE / map.bounds.height; //Actual scaling ratio of minimap to real game. Different from SCREEN_SCALE
+    let scale = SCREENHEIGHT * UI.minimap.screen_scale / map.bounds.height; //Actual scaling ratio of minimap to real game. Different from SCREEN_SCALE
     entities.minimap.scale = scale;
     entities.minimap.height = map.bounds.height * scale;
     entities.minimap.width = map.bounds.width * scale;

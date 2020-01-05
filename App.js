@@ -56,19 +56,21 @@ import Performance from './src/renderers/Performance';
 import Scoreboard from './src/renderers/Scoreboard';
 import { ScoreboardSystem } from './src/systems/ScoreboardSystem';
 import { MinimapSystem } from './src/systems/MinimapSystem';
+import { UI } from './src/constants/UIConstants';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window'); //landscape
 const game_states = {MAIN_MENU:'MAIN_MENU', FIND_MATCH: 'FIND_MATCH', GAME_PLAY: 'GAME_PLAY'};
 
+const controls_margin_left = 75;
 var GetEntities = () => {
     let joystick = {
         type: 'joystick',
         // outerPosition: [SCREENWIDTH / 2, SCREENHEIGHT / 6 * 5],
-        outer_position: [75 + 60, SCREENHEIGHT - 45 - 60],
+        outer_position: [controls_margin_left + UI.joystick.outer_radius, SCREENHEIGHT - UI.joystick.bottom_margin - UI.joystick.outer_radius],
         // outer_position: [30, SCREENHEIGHT - 30],
-        outer_radius: 60,
+        outer_radius: UI.joystick.outer_radius,
         inner_position: [0, 0],
-        inner_radius: 30,
+        inner_radius: UI.joystick.inner_radius,
         touch_id: null,
         active: false,
         angle: null,
@@ -78,8 +80,8 @@ var GetEntities = () => {
     let sprint_button = {
         type: 'button',
         id: 'sprint_button',
-        position: [SCREENWIDTH - 45 - 36, SCREENHEIGHT - 45 - 36],
-        radius: 36,
+        position: [SCREENWIDTH - UI.action_buttons.radius - UI.action_buttons.right_margin_far, SCREENHEIGHT - UI.action_buttons.bottom_margin - UI.action_buttons.radius],
+        radius: UI.action_buttons.radius,
         touch_id: null,
         active: false,
         renderer: Button,
@@ -88,8 +90,8 @@ var GetEntities = () => {
     let action_button = {
         type: 'button',
         id: 'action_button',
-        position: [SCREENWIDTH - 45 - 36, SCREENHEIGHT - 45 - 36 - 36 * 2 - 20],
-        radius: 36,
+        position: [SCREENWIDTH - UI.action_buttons.right_margin_near - UI.action_buttons.radius, SCREENHEIGHT - UI.action_buttons.bottom_margin - UI.action_buttons.radius*3 - UI.action_buttons.button_spacing],
+        radius: UI.action_buttons.radius,
         touch_id: null,
         active: false,
         renderer: Button,
@@ -114,7 +116,7 @@ var GetEntities = () => {
         bases: [],
         players: [],
         flags: [],
-        offset: [10,10], //Minimap position offset. User can drag minimap to change this.
+        offset: [UI.joystick.left_margin,(SCREENHEIGHT*UI.minimap.screen_scale - UI.joystick.outer_radius*2 - UI.joystick.bottom_margin)/2], //User can drag minimap to change position. Initial value align left with joystick and space evenly top and below
         touch_id: null,
         touch_offset: [0,0],
         scale: 0, //size of minimap to size of actual game

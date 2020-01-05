@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { StyleSheet, View, Text } from "react-native";
+import { UI } from "../constants/UIConstants";
 
 export default class Performance extends PureComponent {
     render() {
@@ -19,6 +20,6 @@ export default class Performance extends PureComponent {
 const styles = StyleSheet.create({
     container: {
         position: "absolute",
-        zIndex: 999
+        zIndex: UI.controls.zIndex
     }
 });
