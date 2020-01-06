@@ -36,7 +36,7 @@ import { PlayerSystem } from './src/systems/PlayerSystem';
 import Joystick from './src/renderers/Joystick';
 import {
     SendControls,
-    JoinRoom,
+    JoinGameRoom,
     players,
     InitializeSocketIO,
     FindMatch,
@@ -60,9 +60,10 @@ import { ScoreboardSystem } from './src/systems/ScoreboardSystem';
 import { MinimapSystem } from './src/systems/MinimapSystem';
 import { UI } from './src/constants/UI';
 import LobbyScreen from './src/screens/LobbyScreen';
+import CustomRoomScreen from './src/screens/CustomRoomScreen';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window'); //landscape
-const game_states = {MAIN_MENU:'MAIN_MENU', FIND_MATCH: 'FIND_MATCH', GAME_PLAY: 'GAME_PLAY', CUSTOM_LOBBY: 'CUSTOM_LOBBY'};
+const game_states = {MAIN_MENU:'MAIN_MENU', FIND_MATCH: 'FIND_MATCH', GAME_PLAY: 'GAME_PLAY', CUSTOM_LOBBY: 'CUSTOM_LOBBY', CUSTOM_ROOM: 'CUSTOM_ROOM'};
 
 const controls_margin_left = 75;
 var GetEntities = () => {
@@ -173,12 +174,14 @@ export default class App extends Component {
     componentWillMount() {
         this.find_match_event_listener = EventRegister.on('FIND_MATCH_UPDATE', ({current_players, max_players}) => this.setState({current_players, max_players})); //update waiting screen
         this.join_room_event_listener = EventRegister.on('JOIN_ROOM_CONFIRMED', ()=>this.setState({game_state: game_states.GAME_PLAY})); //start game when join room triggered
+        this.custom_room_event_listener = EventRegister.on('JOIN_CUSTOM_ROOM_CONFIRMED', ()=>this.setState({game_state: game_states.CUSTOM_ROOM})); //start game when join room triggered
         this.join_room_failed_event_listener = EventRegister.on('JOIN_ROOM_FAILED', (error)=>this.displayError(error)); //start game when join room triggered
     }
 
     componentWillUnmount() {
         EventRegister.removeEventListener(this.find_match_event_listener);
         EventRegister.removeEventListener(this.join_room_event_listener);
+        EventRegister.removeEventListener(this.custom_room_event_listener);
         EventRegister.removeEventListener(this.join_room_failed_event_listener);
     }
 
@@ -304,6 +307,9 @@ export default class App extends Component {
 
             case game_states.CUSTOM_LOBBY: 
                 return <LobbyScreen back={()=>this.back()}/>
+            
+            case game_states.CUSTOM_ROOM: 
+                return <CustomRoomScreen back={()=>this.back()}/>
             default:            
                 return this.renderMainMenu();
         }    

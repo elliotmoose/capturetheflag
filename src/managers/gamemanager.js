@@ -21,7 +21,8 @@ export var InitializeSocketIO = (target_server) => {
     socket = io(server);
     socket.on('connect', () => console.log('connected to lobby'));
     socket.on('LOBBY_ROOMS_UPDATE', rooms => OnReceiveLobbyRoomsUpdate(rooms));
-    socket.on('JOIN_ROOM_CONFIRMED', namespace => JoinRoom(namespace));
+    socket.on('JOIN_CUSTOM_ROOM_CONFIRMED', namespace => JoinCustomRoomConfirmed(namespace));
+    socket.on('JOIN_ROOM_CONFIRMED', namespace => JoinGameRoom(namespace));
     socket.on('JOIN_ROOM_FAILED', error => OnJoinRoomFailed(error));
     socket.on('FIND_MATCH_UPDATE', ({current_players, max_players}) => OnReceiveFindMatchUpdate(current_players, max_players));
 };
@@ -41,19 +42,38 @@ export var RequestLoadLobbyRooms = () => {
 }
 
 export var OnReceiveLobbyRoomsUpdate = (rooms) => {
+    EventRegister.emit('LOBBY_ROOMS_UPDATE', rooms);
     console.log(rooms);
+}
+
+export var RequestCreateCustomRoom = () => {
+    socket.emit('REQUEST_CREATE_CUSTOM_ROOM', {
+        //TODO: put real user id
+        user_id: 'elliotmoose',
+        room_name: 'elliot\'s room'
+    });
 }
 
 export var RequestJoinCustomRoom = (room_id) => {
     socket.emit('REQUEST_JOIN_CUSTOM_ROOM', room_id);
 }
 
-export var JoinRoom = namespace => {
+export var JoinCustomRoomConfirmed = namespace => {
+    socket = io(`${server}/${namespace}`);
+    socket.on('CUSTOM_ROOM_UPDATE', ()=> OnReceiveCustomRoomLobbyUpdate());
+    EventRegister.emit('JOIN_CUSTOM_ROOM_CONFIRMED');
+}
+
+export var OnReceiveCustomRoomLobbyUpdate = (room)=>{    
+    EventRegister.emit('CUSTOM_ROOM_UPDATE', room);
+}
+
+export var JoinGameRoom = namespace => {
     socket = io(`${server}/${namespace}`);
     socket.on('BIND_PLAYER', id => OnReceivePlayerBind(id));
     socket.on('INIT_MAP', state => OnReceiveGameMap(state));
     socket.on('GAME_STATE', state => OnReceiveGameState(state));
-    socket.on('GAME_START', start_time => OnReceiveGameStart(start_time));
+    socket.on('GAME_START', start_time => OnReceiveGameStart(start_time));    
     socket.on('PING', ()=> OnReceivePing());
     EventRegister.emit('JOIN_ROOM_CONFIRMED');
 };
