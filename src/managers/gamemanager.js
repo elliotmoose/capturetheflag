@@ -20,8 +20,12 @@ export var InitializeSocketIO = (target_server) => {
     server = target_server
     socket = io(server);
     socket.on('connect', () => console.log('connected to lobby'));
+
+    //CUSTOM
     socket.on('LOBBY_ROOMS_UPDATE', rooms => OnReceiveLobbyRoomsUpdate(rooms));
     socket.on('JOIN_CUSTOM_ROOM_CONFIRMED', namespace => JoinCustomRoomConfirmed(namespace));
+
+    
     socket.on('JOIN_ROOM_CONFIRMED', namespace => JoinGameRoom(namespace));
     socket.on('JOIN_ROOM_FAILED', error => OnJoinRoomFailed(error));
     socket.on('FIND_MATCH_UPDATE', ({current_players, max_players}) => OnReceiveFindMatchUpdate(current_players, max_players));
@@ -60,11 +64,12 @@ export var RequestJoinCustomRoom = (room_id) => {
 
 export var JoinCustomRoomConfirmed = namespace => {
     socket = io(`${server}/${namespace}`);
-    socket.on('CUSTOM_ROOM_UPDATE', ()=> OnReceiveCustomRoomLobbyUpdate());
+    socket.on('CUSTOM_ROOM_UPDATE', (room)=> OnReceiveCustomRoomLobbyUpdate(room));    
     EventRegister.emit('JOIN_CUSTOM_ROOM_CONFIRMED');
 }
 
-export var OnReceiveCustomRoomLobbyUpdate = (room)=>{    
+export var OnReceiveCustomRoomLobbyUpdate = (room)=>{        
+    console.log(room);
     EventRegister.emit('CUSTOM_ROOM_UPDATE', room);
 }
 

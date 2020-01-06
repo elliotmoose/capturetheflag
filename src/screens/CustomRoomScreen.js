@@ -7,24 +7,20 @@ import { EventRegister } from "react-native-event-listeners";
 
 export default class CustomRoomScreen extends Component {
     state = {
-        room: {
-            team_0 : [],
-            team_1 : []
-        }        
+        room: undefined
     }
 
     componentWillMount() {
-        this.room_state_event_listener = EventRegister.on('CUSTOM_ROOM_UPDATE', (rooms)=> this.setState({rooms: rooms || []}));        
+        this.room_state_event_listener = EventRegister.on('CUSTOM_ROOM_UPDATE', (room)=> this.setState({room}));        
     }
     componentWillUnmount() {
         EventRegister.removeEventListener(this.room_state_event_listener);
     }
 
-
-
     render() {        
         return <View style={{ flex: 1, alignItems: 'center' }}>
             <Image source={Images.menu_background} resizeMode='cover' style={{position: 'absolute', width: '100%', height: '100%'}}/>                      
+            <Text>{this.state.room ? this.state.room.name : 'Not connected to any custom room'}</Text>
         </View>
     }
 }
