@@ -1,7 +1,7 @@
 import { players, flags, map } from "../managers/gamemanager"
 import { Dimensions } from "react-native";
 import { Vector2Subtract } from "../helpers/Vectors"
-import { UI } from "../constants/UIConstants";
+import { UI } from "../constants/UI";
 
 const {width: SCREENWIDTH, height: SCREENHEIGHT} = Dimensions.get('window'); //landscape
 

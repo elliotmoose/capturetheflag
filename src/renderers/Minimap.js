@@ -3,7 +3,7 @@ import {View, Image, ImageBackground } from "react-native";
 import { Colors } from "../constants/Colors";
 import Images from "../assets/Images";
 import { player_id } from "../managers/gamemanager";
-import { UI } from "../constants/UIConstants";
+import { UI } from "../constants/UI";
  
 export default class Minimap extends PureComponent {
 

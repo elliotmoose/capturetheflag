@@ -20,7 +20,9 @@ export var InitializeSocketIO = (target_server) => {
     server = target_server
     socket = io(server);
     socket.on('connect', () => console.log('connected to lobby'));
+    socket.on('LOBBY_ROOMS_UPDATE', rooms => OnReceiveLobbyRoomsUpdate(rooms));
     socket.on('JOIN_ROOM_CONFIRMED', namespace => JoinRoom(namespace));
+    socket.on('JOIN_ROOM_FAILED', error => OnJoinRoomFailed(error));
     socket.on('FIND_MATCH_UPDATE', ({current_players, max_players}) => OnReceiveFindMatchUpdate(current_players, max_players));
 };
 
@@ -34,6 +36,17 @@ export var OnReceiveFindMatchUpdate = (current_players, max_players) => {
     EventRegister.emit('FIND_MATCH_UPDATE', {current_players, max_players});
 }
 
+export var RequestLoadLobbyRooms = () => {
+    socket.emit('REQUEST_LOAD_LOBBY_ROOMS');
+}
+
+export var OnReceiveLobbyRoomsUpdate = (rooms) => {
+    console.log(rooms);
+}
+
+export var RequestJoinCustomRoom = (room_id) => {
+    socket.emit('REQUEST_JOIN_CUSTOM_ROOM', room_id);
+}
 
 export var JoinRoom = namespace => {
     socket = io(`${server}/${namespace}`);
@@ -44,6 +57,10 @@ export var JoinRoom = namespace => {
     socket.on('PING', ()=> OnReceivePing());
     EventRegister.emit('JOIN_ROOM_CONFIRMED');
 };
+
+export var OnJoinRoomFailed = error => {
+    EventRegister.emit('JOIN_ROOM_FAILED', error);
+}
 
 let last_ping_date = Date.now();
 export let ping = 0;

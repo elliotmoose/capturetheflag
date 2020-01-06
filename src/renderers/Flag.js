@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { StyleSheet, View, Image } from "react-native";
 import Images from "../assets/Images";
-import { UI } from "../constants/UIConstants";
+import { UI } from "../constants/UI";
  
 export default class Flag extends PureComponent {
   render() {

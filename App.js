@@ -21,6 +21,7 @@ import {
     Dimensions,
     Image,
     TextInput,
+    Alert,
 } from 'react-native';
 
 import {
@@ -39,6 +40,7 @@ import {
     players,
     InitializeSocketIO,
     FindMatch,
+    RequestLoadLobbyRooms,
 } from './src/managers/gamemanager';
 import Player from './src/renderers/Player';
 import Button from './src/renderers/controls/Button';
@@ -56,10 +58,11 @@ import Performance from './src/renderers/Performance';
 import Scoreboard from './src/renderers/Scoreboard';
 import { ScoreboardSystem } from './src/systems/ScoreboardSystem';
 import { MinimapSystem } from './src/systems/MinimapSystem';
-import { UI } from './src/constants/UIConstants';
+import { UI } from './src/constants/UI';
+import LobbyScreen from './src/screens/LobbyScreen';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window'); //landscape
-const game_states = {MAIN_MENU:'MAIN_MENU', FIND_MATCH: 'FIND_MATCH', GAME_PLAY: 'GAME_PLAY'};
+const game_states = {MAIN_MENU:'MAIN_MENU', FIND_MATCH: 'FIND_MATCH', GAME_PLAY: 'GAME_PLAY', CUSTOM_LOBBY: 'CUSTOM_LOBBY'};
 
 const controls_margin_left = 75;
 var GetEntities = () => {
@@ -170,10 +173,17 @@ export default class App extends Component {
     componentWillMount() {
         this.find_match_event_listener = EventRegister.on('FIND_MATCH_UPDATE', ({current_players, max_players}) => this.setState({current_players, max_players})); //update waiting screen
         this.join_room_event_listener = EventRegister.on('JOIN_ROOM_CONFIRMED', ()=>this.setState({game_state: game_states.GAME_PLAY})); //start game when join room triggered
+        this.join_room_failed_event_listener = EventRegister.on('JOIN_ROOM_FAILED', (error)=>this.displayError(error)); //start game when join room triggered
     }
+
     componentWillUnmount() {
         EventRegister.removeEventListener(this.find_match_event_listener);
         EventRegister.removeEventListener(this.join_room_event_listener);
+        EventRegister.removeEventListener(this.join_room_failed_event_listener);
+    }
+
+    displayError(error) {
+        Alert.alert(error.statusText, error.message);
     }
     
     renderGame() {
@@ -205,11 +215,34 @@ export default class App extends Component {
         this.setState({current_game_mode_index: new_index % this.state.game_modes.length});
     }
 
+    getSelectedGameMode() {
+        return this.state.game_modes[this.state.current_game_mode_index];
+    }
     findMatch() {
-        let ip = this.state.current_game_mode_index == 0 ? 'http://localhost:3000' : 'http://mooselliot.com:3000';
-        InitializeSocketIO(ip);
-        FindMatch();
-        this.setState({game_state: game_states.FIND_MATCH});
+        let ip="";
+
+        switch (this.getSelectedGameMode()) {
+            case "LOCAL":
+                ip = 'http://localhost:3000';
+                InitializeSocketIO(ip);
+                FindMatch();
+                this.setState({game_state: game_states.FIND_MATCH});
+                break;
+
+            case "CUSTOM":
+                InitializeSocketIO('http://localhost:3000'); //TODO: test local
+                RequestLoadLobbyRooms();
+                this.setState({game_state: game_states.CUSTOM_LOBBY});
+                break;
+            case "SERVER":
+                ip = 'http://mooselliot.com:3000';
+                InitializeSocketIO(ip);
+                FindMatch();
+                this.setState({game_state: game_states.FIND_MATCH});
+                break;
+            default:
+                break;
+        }        
     }
     
     renderMainMenu() {
@@ -253,7 +286,12 @@ export default class App extends Component {
         </View>
     }
 
+    back() {
+        this.setState({game_state: game_states.MAIN_MENU});
+    }
+
     render() {
+        // return <LobbyScreen back={()=>this.back()}/>
         switch (this.state.game_state) {
             case game_states.MAIN_MENU:
                 return this.renderMainMenu();
@@ -264,6 +302,8 @@ export default class App extends Component {
             case game_states.GAME_PLAY:
                 return this.renderGame();
 
+            case game_states.CUSTOM_LOBBY: 
+                return <LobbyScreen back={()=>this.back()}/>
             default:            
                 return this.renderMainMenu();
         }    

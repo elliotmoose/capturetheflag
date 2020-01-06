@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Colors } from "../constants/Colors";
-import { UI } from "../constants/UIConstants";
+import { UI } from "../constants/UI";
 
 
 export default class Scoreboard extends PureComponent {

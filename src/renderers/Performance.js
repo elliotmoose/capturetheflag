@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { StyleSheet, View, Text } from "react-native";
-import { UI } from "../constants/UIConstants";
+import { UI } from "../constants/UI";
 
 export default class Performance extends PureComponent {
     render() {

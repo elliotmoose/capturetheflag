@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import Stamina from './Stamina';
 import SpriteSheet from 'rn-sprite-sheet';
 import Images from '../assets/Images';
-import { UI } from '../constants/UIConstants';
+import { UI } from '../constants/UI';
 
 export default class Player extends PureComponent {
     render() {    
