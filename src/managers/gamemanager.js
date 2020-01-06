@@ -2,6 +2,11 @@ import io from 'socket.io-client';
 import Player from '../renderers/Player';
 import { EventRegister } from 'react-native-event-listeners';
 
+export var user = {
+    username: 'elliotmoose',
+    id: 'elliotmoose'
+}
+
 export var players = [];
 export var flags = [];
 export var scoreboard = {

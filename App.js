@@ -177,7 +177,7 @@ export default class App extends Component {
         this.custom_room_event_listener = EventRegister.on('JOIN_CUSTOM_ROOM_CONFIRMED', ()=>this.setState({game_state: game_states.CUSTOM_ROOM})); //start game when join room triggered
         this.join_room_failed_event_listener = EventRegister.on('JOIN_ROOM_FAILED', (error)=>this.displayError(error)); //start game when join room triggered
     }
-
+ 
     componentWillUnmount() {
         EventRegister.removeEventListener(this.find_match_event_listener);
         EventRegister.removeEventListener(this.join_room_event_listener);
@@ -294,7 +294,7 @@ export default class App extends Component {
     }
 
     render() {
-        // return <LobbyScreen back={()=>this.back()}/>
+        // return <CustomRoomScreen back={()=>this.back()}/>
         switch (this.state.game_state) {
             case game_states.MAIN_MENU:
                 return this.renderMainMenu();
