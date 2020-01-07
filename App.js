@@ -174,8 +174,9 @@ export default class App extends Component {
     componentWillMount() {
         this.find_match_event_listener = EventRegister.on('FIND_MATCH_UPDATE', ({current_players, max_players}) => this.setState({current_players, max_players})); //update waiting screen
         this.join_room_event_listener = EventRegister.on('JOIN_ROOM_CONFIRMED', ()=>this.setState({game_state: game_states.GAME_PLAY})); //start game when join room triggered
-        this.custom_room_event_listener = EventRegister.on('JOIN_CUSTOM_ROOM_CONFIRMED', ()=>this.setState({game_state: game_states.CUSTOM_ROOM})); //start game when join room triggered
-        this.join_room_failed_event_listener = EventRegister.on('JOIN_ROOM_FAILED', (error)=>this.displayError(error)); //start game when join room triggered
+        this.custom_room_event_listener = EventRegister.on('JOIN_CUSTOM_ROOM_CONFIRMED', ()=>this.setState({game_state: game_states.CUSTOM_ROOM})); 
+        this.join_room_failed_event_listener = EventRegister.on('JOIN_ROOM_FAILED', (error)=>this.displayError(error)); 
+        this.disconnect_custom_room_event_listener = EventRegister.on('DISCONNECTED_CUSTOM_ROOM', ()=>this.setState({game_state: game_states.CUSTOM_LOBBY}));
     }
  
     componentWillUnmount() {

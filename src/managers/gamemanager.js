@@ -1,12 +1,7 @@
 import io from 'socket.io-client';
 import Player from '../renderers/Player';
 import { EventRegister } from 'react-native-event-listeners';
-
-export var user = {
-    username: 'elliotmoose',
-    id: 'elliotmoose'
-}
-
+import { logged_in_user } from './UserManager';
 export var players = [];
 export var flags = [];
 export var scoreboard = {
@@ -36,30 +31,24 @@ export var InitializeSocketIO = (target_server) => {
     socket.on('FIND_MATCH_UPDATE', ({current_players, max_players}) => OnReceiveFindMatchUpdate(current_players, max_players));
 };
 
-export var FindMatch = () => {
-    if(socket) {
-        socket.emit('REQUEST_FIND_MATCH');
-    }
-};
-
 export var OnReceiveFindMatchUpdate = (current_players, max_players) => {
     EventRegister.emit('FIND_MATCH_UPDATE', {current_players, max_players});
 }
 
+//#region CUSTOM
 export var RequestLoadLobbyRooms = () => {
     socket.emit('REQUEST_LOAD_LOBBY_ROOMS');
 }
 
 export var OnReceiveLobbyRoomsUpdate = (rooms) => {
     EventRegister.emit('LOBBY_ROOMS_UPDATE', rooms);
-    console.log(rooms);
 }
 
-export var RequestCreateCustomRoom = () => {
+export var RequestCreateCustomRoom = (room_name) => {    
     socket.emit('REQUEST_CREATE_CUSTOM_ROOM', {
         //TODO: put real user id
-        user_id: 'elliotmoose',
-        room_name: 'elliot\'s room'
+        user_id: logged_in_user.id,
+        room_name: room_name
     });
 }
 
@@ -70,12 +59,28 @@ export var RequestJoinCustomRoom = (room_id) => {
 export var JoinCustomRoomConfirmed = namespace => {
     socket = io(`${server}/${namespace}`);
     socket.on('CUSTOM_ROOM_UPDATE', (room)=> OnReceiveCustomRoomLobbyUpdate(room));    
+    socket.on('disconnect', ()=>OnDisconnectCustomRoom());
     EventRegister.emit('JOIN_CUSTOM_ROOM_CONFIRMED');
 }
 
-export var OnReceiveCustomRoomLobbyUpdate = (room)=>{        
-    console.log(room);
+export var OnReceiveCustomRoomLobbyUpdate = (room)=>{            
     EventRegister.emit('CUSTOM_ROOM_UPDATE', room);
+}
+
+export var RequestLeaveCustomRoom = () => {
+    socket.disconnect();
+    InitializeSocketIO(server);
+}
+
+export var OnDisconnectCustomRoom = () => {
+    EventRegister.emit('DISCONNECTED_CUSTOM_ROOM');
+}
+//#endregion
+
+export var RequestFindNormalMatch = () => {
+    if(socket) {
+        socket.emit('REQUEST_FIND_NORMAL_MATCH', logged_in_user.id);
+    }
 }
 
 export var JoinGameRoom = namespace => {

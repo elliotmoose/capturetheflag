@@ -7,17 +7,7 @@ import { EventRegister } from "react-native-event-listeners";
 
 export default class LobbyScreen extends Component {
     state = {
-        rooms: [
-            {
-                id: 'asdfg',
-                name: 'elliotmoose\'s room',
-                player_count: 5,
-                config: {
-                    max_players: 10,   
-                    game_length: 10,                  
-                }
-            }
-        ],
+        rooms: [],
         selectedIndex: null
     }
 
@@ -50,7 +40,7 @@ export default class LobbyScreen extends Component {
 
     createRoom() {
         //test
-        RequestCreateCustomRoom();
+        RequestCreateCustomRoom('elliot\'s room');
     }
 
     back() {

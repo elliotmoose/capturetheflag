@@ -2,32 +2,12 @@ import React, { Component } from "react";
 import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView } from "react-native";
 import Images from "../assets/Images";
 import { Colors } from "../constants/Colors";
-import { RequestJoinCustomRoom, RequestLoadLobbyRooms, RequestCreateCustomRoom, user } from "../managers/gamemanager";
+import { RequestJoinCustomRoom, RequestLoadLobbyRooms, RequestCreateCustomRoom, user, RequestLeaveCustomRoom } from "../managers/gamemanager";
 import { EventRegister } from "react-native-event-listeners";
 
-const user_1 = {
-    username: 'elliot koh',
-    id: 'elliotmoose'    
-}
 export default class CustomRoomScreen extends Component {
     state = {
-        room: {
-            id: 'namespace_id',
-            name: 'room_name',
-            owner_id: 'elliotmoose',
-            teams: [[user_1],[]],
-            map: {
-                bounds: {
-                    width: 0,
-                    height: 0
-                }
-            },
-            config : {
-                max_score: 5,
-                max_players: 10,
-                game_length: 10
-            },
-        }
+        room: undefined
     }
 
     componentWillMount() {
@@ -83,7 +63,8 @@ export default class CustomRoomScreen extends Component {
     }
 
     leaveRoom() {
-
+        RequestLeaveCustomRoom();
+        RequestLoadLobbyRooms();
     }
 
     startGame() {
