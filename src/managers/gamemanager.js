@@ -9,7 +9,6 @@ export var scoreboard = {
     start_time: 0
 }
 export var map = {};
-export var player_id = null;
 
 export var server = 'http://localhost:3000';
 
@@ -23,12 +22,14 @@ export var InitializeSocketIO = (target_server) => {
 
     //CUSTOM
     socket.on('LOBBY_ROOMS_UPDATE', rooms => OnReceiveLobbyRoomsUpdate(rooms));
-    socket.on('JOIN_CUSTOM_ROOM_CONFIRMED', namespace => JoinCustomRoomConfirmed(namespace));
+    socket.on('COMMAND_JOIN_CUSTOM_ROOM', namespace => CommandJoinCustomRoom(namespace));
 
-    
-    socket.on('JOIN_ROOM_CONFIRMED', namespace => JoinGameRoom(namespace));
+    //MATCHMAKING
+    socket.on('COMMAND_JOIN_GAME_ROOM', namespace => CommandJoinGameRoom(namespace));
+    socket.on('COMMAND_UPDATE_FIND_MATCH', ({current_players, max_players}) => OnReceiveFindMatchUpdate(current_players, max_players));
+
+    //BOTH
     socket.on('JOIN_ROOM_FAILED', error => OnJoinRoomFailed(error));
-    socket.on('FIND_MATCH_UPDATE', ({current_players, max_players}) => OnReceiveFindMatchUpdate(current_players, max_players));
 };
 
 export var OnReceiveFindMatchUpdate = (current_players, max_players) => {
@@ -56,7 +57,7 @@ export var RequestJoinCustomRoom = (room_id) => {
     socket.emit('REQUEST_JOIN_CUSTOM_ROOM', room_id);
 }
 
-export var JoinCustomRoomConfirmed = namespace => {
+export var CommandJoinCustomRoom = namespace => {
     socket = io(`${server}/${namespace}`);
     socket.on('CUSTOM_ROOM_UPDATE', (room)=> OnReceiveCustomRoomLobbyUpdate(room));    
     socket.on('disconnect', ()=>OnDisconnectCustomRoom());
@@ -77,21 +78,27 @@ export var OnDisconnectCustomRoom = () => {
 }
 //#endregion
 
-export var RequestFindNormalMatch = () => {
+export var RequestFindMatch = (matchmaking_type) => {
     if(socket) {
-        socket.emit('REQUEST_FIND_NORMAL_MATCH', logged_in_user.id);
+        socket.emit('REQUEST_FIND_MATCH', {user_id: logged_in_user.id, type: matchmaking_type});        
     }
 }
 
-export var JoinGameRoom = namespace => {
+export var CommandJoinGameRoom = namespace => {
     socket = io(`${server}/${namespace}`);
-    socket.on('BIND_PLAYER', id => OnReceivePlayerBind(id));
+    socket.on('COMMAND_CONFIRM_CONNECT', () => ConfirmConnectGameRoom());
     socket.on('INIT_MAP', state => OnReceiveGameMap(state));
     socket.on('GAME_STATE', state => OnReceiveGameState(state));
     socket.on('GAME_START', start_time => OnReceiveGameStart(start_time));    
     socket.on('PING', ()=> OnReceivePing());
     EventRegister.emit('JOIN_ROOM_CONFIRMED');
 };
+
+export var ConfirmConnectGameRoom = () => {
+    if(socket) {
+        socket.emit('REQUEST_CONFIRM_CONNECT', {user_id: logged_in_user.id});
+    }
+}
 
 export var OnJoinRoomFailed = error => {
     EventRegister.emit('JOIN_ROOM_FAILED', error);
@@ -111,9 +118,6 @@ export var OnReceivePing = ()=>{
     ping = Date.now() - last_ping_date;
 }
 
-export var OnReceivePlayerBind = (id) => {
-    player_id = id;
-}
 export var OnReceiveGameMap = (new_map) => {
     map = new_map;
 }
@@ -129,5 +133,5 @@ export var OnReceiveGameState = (state) => {
 }
 
 export var SendControls = controls => {
-    socket.emit('CONTROLS', controls);
+    socket.emit('CONTROLS', {controls, user_id: logged_in_user.id});
 };

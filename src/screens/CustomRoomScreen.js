@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView } from "react-native";
 import Images from "../assets/Images";
 import { Colors } from "../constants/Colors";
-import { RequestJoinCustomRoom, RequestLoadLobbyRooms, RequestCreateCustomRoom, user, RequestLeaveCustomRoom } from "../managers/gamemanager";
+import { RequestJoinCustomRoom, RequestLoadLobbyRooms, RequestCreateCustomRoom, RequestLeaveCustomRoom } from "../managers/gamemanager";
 import { EventRegister } from "react-native-event-listeners";
+import { logged_in_user } from "../managers/UserManager";
 
 export default class CustomRoomScreen extends Component {
     state = {
@@ -43,7 +44,7 @@ export default class CustomRoomScreen extends Component {
             }
             else {
                 let is_room_owner = this.isRoomOwner();
-                let is_me = player.id == user.id;
+                let is_me = player.id == logged_in_user.id;
                 let background_color = is_room_owner ? Colors.green : (is_me ? Colors.yellow : 'white');
                 views.push(<View style={{backgroundColor: background_color, opacity: 0.29, marginTop: marginTop, flex: 1}}>
                     <Text>
@@ -59,7 +60,7 @@ export default class CustomRoomScreen extends Component {
     }
     
     isRoomOwner() {                
-        return this.state.room != undefined && this.state.room.owner_id == user.id;
+        return this.state.room != undefined && this.state.room.owner_id == logged_in_user.id;
     }
 
     leaveRoom() {

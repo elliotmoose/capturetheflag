@@ -36,11 +36,11 @@ import { PlayerSystem } from './src/systems/PlayerSystem';
 import Joystick from './src/renderers/Joystick';
 import {
     SendControls,
-    JoinGameRoom,
+    CommandJoinGameRoom,
     players,
-    InitializeSocketIO,
-    FindMatch,
+    InitializeSocketIO,    
     RequestLoadLobbyRooms,
+    RequestFindMatch,
 } from './src/managers/gamemanager';
 import Player from './src/renderers/Player';
 import Button from './src/renderers/controls/Button';
@@ -61,6 +61,7 @@ import { MinimapSystem } from './src/systems/MinimapSystem';
 import { UI } from './src/constants/UI';
 import LobbyScreen from './src/screens/LobbyScreen';
 import CustomRoomScreen from './src/screens/CustomRoomScreen';
+import { MatchmakingTypes } from './src/constants/Network';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window'); //landscape
 const game_states = {MAIN_MENU:'MAIN_MENU', FIND_MATCH: 'FIND_MATCH', GAME_PLAY: 'GAME_PLAY', CUSTOM_LOBBY: 'CUSTOM_LOBBY', CUSTOM_ROOM: 'CUSTOM_ROOM'};
@@ -228,8 +229,8 @@ export default class App extends Component {
         switch (this.getSelectedGameMode()) {
             case "LOCAL":
                 ip = 'http://localhost:3000';
-                InitializeSocketIO(ip);
-                FindMatch();
+                InitializeSocketIO(ip);                
+                RequestFindMatch(MatchmakingTypes.NORMAL);
                 this.setState({game_state: game_states.FIND_MATCH});
                 break;
 
@@ -241,9 +242,15 @@ export default class App extends Component {
             case "SERVER":
                 ip = 'http://mooselliot.com:3000';
                 InitializeSocketIO(ip);
-                FindMatch();
+                RequestFindMatch(MatchmakingTypes.NORMAL);
                 this.setState({game_state: game_states.FIND_MATCH});
                 break;
+            case "NORMAL":
+                ip = 'http://mooselliot.com:3000';
+                InitializeSocketIO(ip);                
+                RequestFindMatch(MatchmakingTypes.NORMAL);
+                this.setState({game_state: game_states.FIND_MATCH});
+                    
             default:
                 break;
         }        
