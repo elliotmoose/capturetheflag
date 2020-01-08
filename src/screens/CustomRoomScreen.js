@@ -43,7 +43,7 @@ export default class CustomRoomScreen extends Component {
                 continue;
             }
             else {
-                let is_room_owner = this.isRoomOwner();
+                let is_room_owner = this.isRoomOwner(player.id);
                 let is_me = player.id == logged_in_user.id;
                 let background_color = is_room_owner ? Colors.green : (is_me ? Colors.yellow : 'white');
                 views.push(<View style={{backgroundColor: background_color, opacity: 0.29, marginTop: marginTop, flex: 1}}>
@@ -59,8 +59,8 @@ export default class CustomRoomScreen extends Component {
         </View>;
     }
     
-    isRoomOwner() {                
-        return this.state.room != undefined && this.state.room.owner_id == logged_in_user.id;
+    isRoomOwner(id) {                
+        return this.state.room != undefined && this.state.room.owner_id == id;
     }
 
     leaveRoom() {
@@ -74,7 +74,7 @@ export default class CustomRoomScreen extends Component {
 
     render() {        
         let room_name = this.state.room ? this.state.room.name : 'Not Connected';        
-        let is_room_owner = this.isRoomOwner();
+        let is_room_owner = this.isRoomOwner(logged_in_user.id);
         return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             <Image source={Images.menu_background} resizeMode='cover' style={{position: 'absolute', width: '100%', height: '100%'}}/>                      
             <View style={{width: '100%', height: 27, marginTop: 20, marginBottom: 16,}}>
