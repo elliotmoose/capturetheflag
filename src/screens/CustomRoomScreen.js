@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView } from "react-native";
 import Images from "../assets/Images";
 import { Colors } from "../constants/Colors";
-import { RequestJoinCustomRoom, RequestLoadLobbyRooms, RequestCreateCustomRoom, RequestLeaveCustomRoom } from "../managers/gamemanager";
+import * as GameManager from "../managers/gamemanager";
 import { EventRegister } from "react-native-event-listeners";
 import { logged_in_user } from "../managers/UserManager";
 
@@ -23,7 +23,7 @@ export default class CustomRoomScreen extends Component {
         if(!room) {
             return <View/>
         }
-        let players = room.teams[team];
+        let players = room.users.filter(p=> p.team == team);
 
         let no_of_players_per_team = Math.round(room.config.max_players/2);
         let views = [];
@@ -64,12 +64,12 @@ export default class CustomRoomScreen extends Component {
     }
 
     leaveRoom() {
-        RequestLeaveCustomRoom();
-        RequestLoadLobbyRooms();
+        GameManager.RequestLeaveCustomRoom();
+        GameManager.RequestLoadLobbyRooms();
     }
 
     startGame() {
-
+        GameManager.RequestStartGame();
     }
 
     render() {        

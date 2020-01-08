@@ -47,7 +47,6 @@ export var OnReceiveLobbyRoomsUpdate = (rooms) => {
 
 export var RequestCreateCustomRoom = (room_name) => {    
     socket.emit('REQUEST_CREATE_CUSTOM_ROOM', {
-        //TODO: put real user id
         user_id: logged_in_user.id,
         room_name: room_name
     });
@@ -60,13 +59,22 @@ export var RequestJoinCustomRoom = (room_id) => {
 export var CommandJoinCustomRoom = namespace => {
     socket = io(`${server}/${namespace}`);
     socket.on('CUSTOM_ROOM_UPDATE', (room)=> OnReceiveCustomRoomLobbyUpdate(room));    
+    socket.on('COMMAND_GET_USER_ID', ()=> OnCommandGetUserId()); //user_id must be set before user officially joins the room    
+    socket.on('COMMAND_JOIN_GAME_ROOM', namespace => CommandJoinGameRoom(namespace));
     socket.on('disconnect', ()=>OnDisconnectCustomRoom());
     EventRegister.emit('JOIN_CUSTOM_ROOM_CONFIRMED');
+}
+
+export var OnCommandGetUserId = ()=>{
+    if(socket && logged_in_user) {
+        socket.emit('REQUEST_SET_USER_ID', {user_id: logged_in_user.id});
+    }
 }
 
 export var OnReceiveCustomRoomLobbyUpdate = (room)=>{            
     EventRegister.emit('CUSTOM_ROOM_UPDATE', room);
 }
+
 
 export var RequestLeaveCustomRoom = () => {
     socket.disconnect();
@@ -75,6 +83,12 @@ export var RequestLeaveCustomRoom = () => {
 
 export var OnDisconnectCustomRoom = () => {
     EventRegister.emit('DISCONNECTED_CUSTOM_ROOM');
+}
+
+export var RequestStartGame = () => {
+    if(socket && logged_in_user) {
+        socket.emit('REQUEST_START_CUSTOM_GAME', {user_id: logged_in_user.id});
+    }
 }
 //#endregion
 
