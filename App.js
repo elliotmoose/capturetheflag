@@ -62,6 +62,7 @@ import { UI } from './src/constants/UI';
 import LobbyScreen from './src/screens/LobbyScreen';
 import CustomRoomScreen from './src/screens/CustomRoomScreen';
 import { MatchmakingTypes } from './src/constants/Network';
+import UsernameScreen from './src/screens/UsernameScreen';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window'); //landscape
 const game_states = {MAIN_MENU:'MAIN_MENU', FIND_MATCH: 'FIND_MATCH', GAME_PLAY: 'GAME_PLAY', CUSTOM_LOBBY: 'CUSTOM_LOBBY', CUSTOM_ROOM: 'CUSTOM_ROOM'};
@@ -235,7 +236,9 @@ export default class App extends Component {
                 break;
 
             case "CUSTOM":
-                InitializeSocketIO('http://localhost:3000'); //TODO: test local
+                // InitializeSocketIO('http://localhost:3000'); //TODO: test local
+                InitializeSocketIO('http://mooselliot.com:3000'); //TODO: test local
+                // InitializeSocketIO('http://192.168.1.88:3000'); //TODO: test local
                 RequestLoadLobbyRooms();
                 this.setState({game_state: game_states.CUSTOM_LOBBY});
                 break;
@@ -247,6 +250,7 @@ export default class App extends Component {
                 break;
             case "NORMAL":
                 ip = 'http://mooselliot.com:3000';
+                // ip = 'http://192.168.1.88:3000';
                 InitializeSocketIO(ip);                
                 RequestFindMatch(MatchmakingTypes.NORMAL);
                 this.setState({game_state: game_states.FIND_MATCH});
@@ -302,6 +306,7 @@ export default class App extends Component {
     }
 
     render() {
+        return <UsernameScreen/>
         // return <CustomRoomScreen back={()=>this.back()}/>
         switch (this.state.game_state) {
             case game_states.MAIN_MENU:

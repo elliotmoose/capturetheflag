@@ -18,6 +18,9 @@ export default class CustomRoomScreen extends Component {
         EventRegister.removeEventListener(this.room_state_event_listener);
     }
 
+    joinTeam(team) {
+        GameManager.RequestJoinTeam(team);
+    }
     renderPlayersInTeam(team) {
         let room = this.state.room;
         if(!room) {
@@ -39,7 +42,9 @@ export default class CustomRoomScreen extends Component {
             let player = players[i];
 
             if(player == undefined) {
-                views.push(<View style={{backgroundColor: 'white', opacity: 0.13, marginTop: marginTop, flex: 1}}></View>);
+                views.push(<TouchableOpacity style={{backgroundColor: 'white', opacity: 0.13, marginTop: marginTop, flex: 1, justifyContent: 'center', alignItems: 'center'}} onPress={()=> this.joinTeam(team)}>
+                    <Text>Join Team</Text>
+                </TouchableOpacity>);
                 continue;
             }
             else {

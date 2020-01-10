@@ -85,6 +85,11 @@ export var OnDisconnectCustomRoom = () => {
     EventRegister.emit('DISCONNECTED_CUSTOM_ROOM');
 }
 
+export var RequestJoinTeam = (team) => {
+    if(socket && logged_in_user) {
+        socket.emit('REQUEST_JOIN_TEAM', {user_id: logged_in_user.id, team: team});
+    }    
+}
 export var RequestStartGame = () => {
     if(socket && logged_in_user) {
         socket.emit('REQUEST_START_CUSTOM_GAME', {user_id: logged_in_user.id});
