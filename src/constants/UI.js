@@ -41,5 +41,9 @@ export const UI = {
     },
     scoreboard: {
         zIndex: 999
+    },
+    announcements: {
+        zIndex: 999,
+        fontSize: 15,
     }
 }
