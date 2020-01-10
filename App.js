@@ -63,9 +63,10 @@ import LobbyScreen from './src/screens/LobbyScreen';
 import CustomRoomScreen from './src/screens/CustomRoomScreen';
 import { MatchmakingTypes } from './src/constants/Network';
 import UsernameScreen from './src/screens/UsernameScreen';
+import { game_domain } from './src/constants/Config';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window'); //landscape
-const game_states = {MAIN_MENU:'MAIN_MENU', FIND_MATCH: 'FIND_MATCH', GAME_PLAY: 'GAME_PLAY', CUSTOM_LOBBY: 'CUSTOM_LOBBY', CUSTOM_ROOM: 'CUSTOM_ROOM'};
+const game_states = { NEW_USER: 'NEW_USER', MAIN_MENU:'MAIN_MENU', FIND_MATCH: 'FIND_MATCH', GAME_PLAY: 'GAME_PLAY', CUSTOM_LOBBY: 'CUSTOM_LOBBY', CUSTOM_ROOM: 'CUSTOM_ROOM'};
 
 const controls_margin_left = 75;
 var GetEntities = () => {
@@ -162,10 +163,10 @@ let entities = GetEntities();
 export default class App extends Component {
     
     state = {
-        game_state: game_states.MAIN_MENU,
+        game_state: game_states.NEW_USER,
         current_players: 0,
         max_players: 0,
-        game_modes: ["LOCAL", "SERVER", "CUSTOM", "NORMAL", "RANKED"],
+        game_modes: ["CUSTOM", "NORMAL"],
         current_game_mode_index: 0
     }
 
@@ -174,6 +175,7 @@ export default class App extends Component {
     }
 
     componentWillMount() {
+        this.logged_in_event_listener = EventRegister.on('USER_LOGGED_IN', () => this.setState({game_state: game_states.MAIN_MENU})); 
         this.find_match_event_listener = EventRegister.on('FIND_MATCH_UPDATE', ({current_players, max_players}) => this.setState({current_players, max_players})); //update waiting screen
         this.join_room_event_listener = EventRegister.on('JOIN_ROOM_CONFIRMED', ()=>this.setState({game_state: game_states.GAME_PLAY})); //start game when join room triggered
         this.custom_room_event_listener = EventRegister.on('JOIN_CUSTOM_ROOM_CONFIRMED', ()=>this.setState({game_state: game_states.CUSTOM_ROOM})); 
@@ -182,6 +184,7 @@ export default class App extends Component {
     }
  
     componentWillUnmount() {
+        EventRegister.removeEventListener(this.logged_in_event_listener);
         EventRegister.removeEventListener(this.find_match_event_listener);
         EventRegister.removeEventListener(this.join_room_event_listener);
         EventRegister.removeEventListener(this.custom_room_event_listener);
@@ -225,33 +228,15 @@ export default class App extends Component {
         return this.state.game_modes[this.state.current_game_mode_index];
     }
     findMatch() {
-        let ip="";
-
-        switch (this.getSelectedGameMode()) {
-            case "LOCAL":
-                ip = 'http://localhost:3000';
-                InitializeSocketIO(ip);                
-                RequestFindMatch(MatchmakingTypes.NORMAL);
-                this.setState({game_state: game_states.FIND_MATCH});
-                break;
-
+        switch (this.getSelectedGameMode()) {            
             case "CUSTOM":
-                // InitializeSocketIO('http://localhost:3000'); //TODO: test local
-                InitializeSocketIO('http://mooselliot.com:3000'); //TODO: test local
-                // InitializeSocketIO('http://192.168.1.88:3000'); //TODO: test local
+                InitializeSocketIO(game_domain); 
                 RequestLoadLobbyRooms();
                 this.setState({game_state: game_states.CUSTOM_LOBBY});
                 break;
-            case "SERVER":
-                ip = 'http://mooselliot.com:3000';
-                InitializeSocketIO(ip);
-                RequestFindMatch(MatchmakingTypes.NORMAL);
-                this.setState({game_state: game_states.FIND_MATCH});
-                break;
+
             case "NORMAL":
-                ip = 'http://mooselliot.com:3000';
-                // ip = 'http://192.168.1.88:3000';
-                InitializeSocketIO(ip);                
+                InitializeSocketIO(game_domain);                
                 RequestFindMatch(MatchmakingTypes.NORMAL);
                 this.setState({game_state: game_states.FIND_MATCH});
                     
@@ -306,9 +291,12 @@ export default class App extends Component {
     }
 
     render() {
-        return <UsernameScreen/>
+        
         // return <CustomRoomScreen back={()=>this.back()}/>
         switch (this.state.game_state) {
+            case game_states.NEW_USER: 
+                return <UsernameScreen/>
+                
             case game_states.MAIN_MENU:
                 return this.renderMainMenu();
 

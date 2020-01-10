@@ -20,7 +20,7 @@ export default class UsernameScreen extends Component {
 
     async submitUsername() {
         // this.state.username        
-        let response = await SignupNewPlayer(this.state.username);
+        let response = await SignupNewPlayer(this.state.username);                
     }
     
     render() {        
@@ -44,6 +44,9 @@ export default class UsernameScreen extends Component {
                         placeholderTextColor='#CCC'
                         ref={(ref)=>this.username_text_input = ref}
                         onChangeText={(text)=> {this.setState({username: text})}}
+                        autoCompleteType='off'
+                        autoCapitalize='none'       
+                        autoFocus={true}                 
                         >
                             {this.state.username}
                         </TextInput>

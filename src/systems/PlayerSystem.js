@@ -1,7 +1,7 @@
 import { players } from '../managers/gamemanager';
 import Player from '../renderers/Player';
 import { Vector2Subtract, Vector2Magnitude } from '../helpers/Vectors';
-import { config } from '../managers/config';
+import { config } from '../constants/Config';
 
 const Lerp = (from, to, progress) => {
     return from + (to - from) * progress;

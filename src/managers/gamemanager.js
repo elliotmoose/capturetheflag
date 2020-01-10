@@ -10,7 +10,7 @@ export var scoreboard = {
 }
 export var map = {};
 
-export var server = 'http://localhost:3000';
+export var server = '';
 
 export var socket;
 
@@ -38,6 +38,7 @@ export var OnReceiveFindMatchUpdate = (current_players, max_players) => {
 
 //#region CUSTOM
 export var RequestLoadLobbyRooms = () => {
+    console.log('loading lobby')
     socket.emit('REQUEST_LOAD_LOBBY_ROOMS');
 }
 
@@ -45,11 +46,16 @@ export var OnReceiveLobbyRoomsUpdate = (rooms) => {
     EventRegister.emit('LOBBY_ROOMS_UPDATE', rooms);
 }
 
-export var RequestCreateCustomRoom = (room_name) => {    
-    socket.emit('REQUEST_CREATE_CUSTOM_ROOM', {
-        user_id: logged_in_user.id,
-        room_name: room_name
-    });
+export var RequestCreateCustomRoom = (room_name) => {      
+    if(socket && logged_in_user) {
+        socket.emit('REQUEST_CREATE_CUSTOM_ROOM', {
+            user_id: logged_in_user.id,
+            room_name: room_name
+        });
+    }
+    else {
+        console.log('NO SOCKET OR LOGGED IN USER');
+    }
 }
 
 export var RequestJoinCustomRoom = (room_id) => {
@@ -68,6 +74,9 @@ export var CommandJoinCustomRoom = namespace => {
 export var OnCommandGetUserId = ()=>{
     if(socket && logged_in_user) {
         socket.emit('REQUEST_SET_USER_ID', {user_id: logged_in_user.id});
+    }
+    else {
+        console.log('NO SOCKET OR LOGGED IN USER');
     }
 }
 
@@ -89,10 +98,16 @@ export var RequestJoinTeam = (team) => {
     if(socket && logged_in_user) {
         socket.emit('REQUEST_JOIN_TEAM', {user_id: logged_in_user.id, team: team});
     }    
+    else {
+        console.log('NO SOCKET OR LOGGED IN USER');
+    }
 }
 export var RequestStartGame = () => {
     if(socket && logged_in_user) {
         socket.emit('REQUEST_START_CUSTOM_GAME', {user_id: logged_in_user.id});
+    }
+    else {
+        console.log('NO SOCKET OR LOGGED IN USER');
     }
 }
 //#endregion
@@ -100,6 +115,9 @@ export var RequestStartGame = () => {
 export var RequestFindMatch = (matchmaking_type) => {
     if(socket) {
         socket.emit('REQUEST_FIND_MATCH', {user_id: logged_in_user.id, type: matchmaking_type});        
+    }
+    else {
+        console.log('NO SOCKET OR LOGGED IN USER');
     }
 }
 
@@ -114,8 +132,11 @@ export var CommandJoinGameRoom = namespace => {
 };
 
 export var ConfirmConnectGameRoom = () => {
-    if(socket) {
+    if(socket && logged_in_user) {
         socket.emit('REQUEST_CONFIRM_CONNECT', {user_id: logged_in_user.id});
+    }
+    else {
+        console.log('NO SOCKET OR LOGGED IN USER');
     }
 }
 
