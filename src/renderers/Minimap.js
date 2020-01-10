@@ -2,12 +2,14 @@ import React, { PureComponent } from "react";
 import {View, Image, ImageBackground } from "react-native";
 import { Colors } from "../constants/Colors";
 import Images from "../assets/Images";
-import { player_id } from "../managers/gamemanager";
+
 import { UI } from "../constants/UI";
+import { logged_in_user } from "../managers/UserManager";
  
 export default class Minimap extends PureComponent {
 
     renderPlayers(scale) {
+        
         return this.props.players.map(player => {
 
             let newRadius = player.radius * scale;
@@ -15,7 +17,7 @@ export default class Minimap extends PureComponent {
             let newLeft = player.position[0] * scale - newRadius;
             let playerColor;
 
-            if (player.id == player_id) {
+            if (player.id == logged_in_user.id) {
                 playerColor = "yellow";
             } else {
                 playerColor = (player.team==0) ? Colors.lime_green : Colors.red;

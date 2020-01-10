@@ -1,11 +1,25 @@
 import React, { PureComponent, useState, Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import Stamina from './Stamina';
 import SpriteSheet from 'rn-sprite-sheet';
 import Images from '../assets/Images';
 import { UI } from '../constants/UI';
+import { Colors } from '../constants/Colors';
 
 export default class Player extends PureComponent {
+
+    renderUsername() {
+        let username_color = 'black'//this.props.team == 0 ? Colors.red : 'blue';
+        let radius = this.props.radius;
+        const stamina_margin_bottom = 24;
+        const stamina_width = 80;
+        const stamina_height = 14;
+
+        return <View style={{position:'absolute', zIndex: 999, left: radius - stamina_width / 2, top: -(stamina_height + stamina_margin_bottom), width: stamina_width, height: stamina_height}}>
+            <Text style={{marginTop: 3, textAlign: 'center', color: username_color, fontFamily: 'Endless Boss Battle', fontSize: 9, flex: 1}}>{this.props.username}</Text>
+        </View>
+    }
+
     render() {    
         if(this.animating_direction === undefined) {
             this.animating_direction = 'down';
@@ -61,6 +75,7 @@ export default class Player extends PureComponent {
             this.animating = false; //reset
         }
         
+        let team_color = this.props.team == 0 ? Colors.red : 'blue';
         let radius = this.props.radius;
         let x = this.props.render_position[0] - radius;
         let y = this.props.render_position[1] - radius;
@@ -73,8 +88,7 @@ export default class Player extends PureComponent {
 
         const stamina_width = 80;
         const stamina_height = 14;
-        const stamina_margin_bottomm = 24;
-        
+        const stamina_margin_bottom = 24;
         let shadow_radius = radius / 2;
 
         return (
@@ -92,7 +106,8 @@ export default class Player extends PureComponent {
                     />
                 </View>
                 <View style={{position: 'absolute',left: radius-shadow_radius, bottom: -shadow_radius, width:shadow_radius*2, height: shadow_radius*2,borderRadius: shadow_radius, opacity: 0.3, transform:[{scaleX:2}], backgroundColor:'black', zIndex: 200}}></View>
-                <Stamina style={{ left: radius - stamina_width / 2, top: -(stamina_height + stamina_margin_bottomm), width: stamina_width, height: stamina_height, zIndex: UI.player.stamina.zIndex }} percentage={stamina_percentage} />
+                <Stamina style={{ left: radius - stamina_width / 2, top: -(stamina_height + stamina_margin_bottom), width: stamina_width, height: stamina_height, zIndex: UI.player.stamina.zIndex }} percentage={stamina_percentage} />                
+                {this.renderUsername()}
                 <View style={[styles.action_indicator, { left: action_x, top: action_y, borderRadius: action_radius, width: action_radius * 2, height: action_radius * 2, opacity: this.props.action ? 0.2 : 0 }]} />
             </View>
         );
