@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* capturetheflagTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* capturetheflagTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -16,10 +17,10 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* capturetheflagTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* capturetheflagTests.m */; };
 		80438C73528DF269B7F87E04 /* libPods-capturetheflag-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6501CEF5B4D3DA1F44790D9E /* libPods-capturetheflag-tvOS.a */; };
+		B6CEA9C98FA74439A37B360B /* EndlessBossBattleRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B2854F2484D846BD9B5C04E1 /* EndlessBossBattleRegular.ttf */; };
 		CEA39B98B2C7F27D3DDD29B2 /* libPods-capturetheflag-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F203E3ABA5090582D0D4164C /* libPods-capturetheflag-tvOSTests.a */; };
 		DA71DCD5568EA2D487A1F2AA /* libPods-capturetheflagTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC4CB2E278DBFE2572B5FE60 /* libPods-capturetheflagTests.a */; };
 		EE288546C277998AF39CCC43 /* libPods-capturetheflag.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B89B006FBE0084AA18742371 /* libPods-capturetheflag.a */; };
-		B6CEA9C98FA74439A37B360B /* EndlessBossBattleRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B2854F2484D846BD9B5C04E1 /* EndlessBossBattleRegular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,7 +46,7 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* capturetheflagTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = capturetheflagTests.m; sourceTree = "<group>"; };
 		0ADA3C9EB35762AD65499E5C /* Pods-capturetheflag.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-capturetheflag.debug.xcconfig"; path = "Pods/Target Support Files/Pods-capturetheflag/Pods-capturetheflag.debug.xcconfig"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* capturetheflag.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = capturetheflag.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* CTF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CTF.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = capturetheflag/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = capturetheflag/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -58,6 +59,7 @@
 		6501CEF5B4D3DA1F44790D9E /* libPods-capturetheflag-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-capturetheflag-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92E6DB7E2D1A5700743DCF05 /* Pods-capturetheflag-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-capturetheflag-tvOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-capturetheflag-tvOS/Pods-capturetheflag-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		A9DFB333CC71E6ADE06988AE /* Pods-capturetheflag.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-capturetheflag.release.xcconfig"; path = "Pods/Target Support Files/Pods-capturetheflag/Pods-capturetheflag.release.xcconfig"; sourceTree = "<group>"; };
+		B2854F2484D846BD9B5C04E1 /* EndlessBossBattleRegular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EndlessBossBattleRegular.ttf; path = ../src/assets/fonts/EndlessBossBattleRegular.ttf; sourceTree = "<group>"; };
 		B89B006FBE0084AA18742371 /* libPods-capturetheflag.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-capturetheflag.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC4CB2E278DBFE2572B5FE60 /* libPods-capturetheflagTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-capturetheflagTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C76101256042179324B49ACA /* Pods-capturetheflag-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-capturetheflag-tvOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-capturetheflag-tvOSTests/Pods-capturetheflag-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -67,7 +69,6 @@
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F203E3ABA5090582D0D4164C /* libPods-capturetheflag-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-capturetheflag-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9A37B6381F6B6ED8F6294FA /* Pods-capturetheflag-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-capturetheflag-tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-capturetheflag-tvOSTests/Pods-capturetheflag-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		B2854F2484D846BD9B5C04E1 /* EndlessBossBattleRegular.ttf */ = {isa = PBXFileReference; name = "EndlessBossBattleRegular.ttf"; path = "../src/assets/fonts/EndlessBossBattleRegular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,7 +192,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* capturetheflag.app */,
+				13B07F961A680F5B00A75B9A /* CTF.app */,
 				00E356EE1AD99517003FC87E /* capturetheflagTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* capturetheflag-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* capturetheflag-tvOSTests.xctest */,
@@ -200,13 +201,12 @@
 			sourceTree = "<group>";
 		};
 		AC8BE67C9DD9420ABF2BA07C /* Resources */ = {
-			isa = "PBXGroup";
+			isa = PBXGroup;
 			children = (
 				B2854F2484D846BD9B5C04E1 /* EndlessBossBattleRegular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 
@@ -247,7 +247,7 @@
 			);
 			name = capturetheflag;
 			productName = capturetheflag;
-			productReference = 13B07F961A680F5B00A75B9A /* capturetheflag.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* CTF.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E47A1E0B4A5D006451C7 /* capturetheflag-tvOS */ = {
@@ -631,7 +631,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.kohbroco.capturetheflag;
-				PRODUCT_NAME = capturetheflag;
+				PRODUCT_NAME = CTF;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -654,7 +654,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.kohbroco.capturetheflag;
-				PRODUCT_NAME = capturetheflag;
+				PRODUCT_NAME = CTF;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
