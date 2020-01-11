@@ -8,6 +8,7 @@ export var scoreboard = {
     score: [],
     start_time: 0
 }
+export var announcements = [];
 export var map = {};
 
 export var server = '';
@@ -170,6 +171,7 @@ export var OnReceiveGameState = (state) => {
     players = state.players;
     flags = state.flags;
     scoreboard.score = state.score;
+    announcements = state.announcements.map(announcement => announcement.message);
 }
 
 export var SendControls = controls => {

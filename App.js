@@ -64,6 +64,8 @@ import CustomRoomScreen from './src/screens/CustomRoomScreen';
 import { MatchmakingTypes } from './src/constants/Network';
 import UsernameScreen from './src/screens/UsernameScreen';
 import { game_domain } from './src/constants/Config';
+import Announcements from './src/renderers/Announcements';
+import { AnnouncementSystem } from './src/systems/AnnouncementSystem';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window'); //landscape
 const game_states = { NEW_USER: 'NEW_USER', MAIN_MENU:'MAIN_MENU', FIND_MATCH: 'FIND_MATCH', GAME_PLAY: 'GAME_PLAY', CUSTOM_LOBBY: 'CUSTOM_LOBBY', CUSTOM_ROOM: 'CUSTOM_ROOM'};
@@ -142,6 +144,11 @@ var GetEntities = () => {
         renderer: Scoreboard
     }
 
+    let announcements = {
+        messages: [],
+        renderer: Announcements,
+    }
+
     let entities = {
         map,
         sprint_button,
@@ -152,6 +159,7 @@ var GetEntities = () => {
         performance,
         scoreboard,
         minimap,
+        announcements,
     };
 
     return entities;
@@ -208,7 +216,8 @@ export default class App extends Component {
                 GameStateSystem,
                 PerformanceSystem,
                 ScoreboardSystem,
-                MinimapSystem
+                MinimapSystem,
+                AnnouncementSystem,
             ]}
             entities={entities}>
             <StatusBar hidden={true} />
