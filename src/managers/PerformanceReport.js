@@ -30,6 +30,9 @@ export let frame_report = () => {
     }
 }
 
+/**
+ * ping every 1 second
+ */
 export let ping_report = () => {
     if(last_ping_report_time == undefined) {
         last_ping_report_time = Date.now();

@@ -2,13 +2,20 @@ import io from 'socket.io-client';
 import Player from '../renderers/Player';
 import { EventRegister } from 'react-native-event-listeners';
 import { logged_in_user } from './UserManager';
+import { game_domain } from '../constants/Config';
 export var players = [];
 export var flags = [];
 export var scoreboard = {
     score: [],
     start_time: 0
 }
-export var announcements = [];
+// export var announcement = {
+//     title: 'CAPTURED!',
+//     subtitle: 'mooselliot has captured green team\'s flag',
+//     layout: 'SUBTITLE',
+//     duration: 'LONG'
+// };
+
 export var map = {};
 
 export var server = '';
@@ -35,6 +42,11 @@ export var InitializeSocketIO = (target_server) => {
 
 export var OnReceiveFindMatchUpdate = (current_players, max_players) => {
     EventRegister.emit('FIND_MATCH_UPDATE', {current_players, max_players});
+}
+
+export var RequestBackToLobby = () => {
+    socket.disconnect();
+    InitializeSocketIO(game_domain);
 }
 
 //#region CUSTOM
@@ -88,11 +100,15 @@ export var OnReceiveCustomRoomLobbyUpdate = (room)=>{
 
 export var RequestLeaveCustomRoom = () => {
     socket.disconnect();
-    InitializeSocketIO(server);
+    InitializeSocketIO(game_domain);
 }
 
 export var OnDisconnectCustomRoom = () => {
     EventRegister.emit('DISCONNECTED_CUSTOM_ROOM');
+}
+
+export var OnDisconnectGameRoom = () => {
+    EventRegister.emit('DISCONNECTED_GAME_ROOM');
 }
 
 export var RequestJoinTeam = (team) => {
@@ -124,11 +140,16 @@ export var RequestFindMatch = (matchmaking_type) => {
 
 export var CommandJoinGameRoom = namespace => {
     socket = io(`${server}/${namespace}`);
+    socket.on('disconnect', () => OnDisconnectGameRoom());
     socket.on('COMMAND_CONFIRM_CONNECT', () => ConfirmConnectGameRoom());
     socket.on('INIT_MAP', state => OnReceiveGameMap(state));
     socket.on('GAME_STATE', state => OnReceiveGameState(state));
     socket.on('GAME_START', start_time => OnReceiveGameStart(start_time));    
+    socket.on('ANNOUNCEMENT', announcement => OnReceiveAnnouncement(announcement));    
     socket.on('PING', ()=> OnReceivePing());
+    // socket.on('pong', (p)=> {
+    //     ping=p;
+    // });
     EventRegister.emit('JOIN_ROOM_CONFIRMED');
 };
 
@@ -150,7 +171,7 @@ export let ping = 0;
 
 export var Ping = ()=>{
     if(socket) {
-        last_ping_date = Date.now();
+        last_ping_date = Date.now();        
         socket.emit('PING');
     }
 }
@@ -171,9 +192,14 @@ export var OnReceiveGameState = (state) => {
     players = state.players;
     flags = state.flags;
     scoreboard.score = state.score;
-    announcements = state.announcements.map(announcement => announcement.message);
+}
+
+export var OnReceiveAnnouncement = (announcement) => {
+    EventRegister.emit('ANNOUNCEMENT', announcement);
 }
 
 export var SendControls = controls => {
-    socket.emit('CONTROLS', {controls, user_id: logged_in_user.id});
+    if(socket) {
+        socket.emit('CONTROLS', {controls, user_id: logged_in_user.id});
+    }
 };

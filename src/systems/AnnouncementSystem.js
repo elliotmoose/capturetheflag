@@ -1,11 +1,11 @@
 import { Dimensions } from "react-native";
-import { announcements } from "../managers/gamemanager"
+// import { announcement } from "../managers/gamemanager"
 
 const {width: SCREENWIDTH, height: SCREENHEIGHT} = Dimensions.get('window'); //landscape
 
 export const AnnouncementSystem = (entities) => {
 
-  entities.announcements.messages = announcements;
+  entities.announcements.announcement = announcement;
 
   return entities;
 };

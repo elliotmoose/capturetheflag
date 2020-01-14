@@ -1,6 +1,6 @@
 export const config = {
     LERP_THRESHOLD: 150,
-    local: false
+    local: true
 }
 
 export const game_domain = config.local ? 'http://localhost:3000' : 'http://mooselliot.com:3000';

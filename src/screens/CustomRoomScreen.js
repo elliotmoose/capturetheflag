@@ -69,7 +69,7 @@ export default class CustomRoomScreen extends Component {
     }
 
     leaveRoom() {
-        GameManager.RequestLeaveCustomRoom();
+        GameManager.RequestBackToLobby();
         GameManager.RequestLoadLobbyRooms();
     }
 

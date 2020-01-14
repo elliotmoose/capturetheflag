@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, { Component, useState } from 'react';
+import React, { Component, useState, PureComponent } from 'react';
 // import {} from 'react-native-socketio'
 import { GameEngine } from 'react-native-game-engine';
 import { EventRegister } from 'react-native-event-listeners';
@@ -168,7 +168,7 @@ var GetEntities = () => {
 let entities = GetEntities();
 
 
-export default class App extends Component {
+export default class App extends PureComponent {
     
     state = {
         game_state: game_states.NEW_USER,
@@ -188,6 +188,7 @@ export default class App extends Component {
         this.join_room_event_listener = EventRegister.on('JOIN_ROOM_CONFIRMED', ()=>this.setState({game_state: game_states.GAME_PLAY})); //start game when join room triggered
         this.custom_room_event_listener = EventRegister.on('JOIN_CUSTOM_ROOM_CONFIRMED', ()=>this.setState({game_state: game_states.CUSTOM_ROOM})); 
         this.join_room_failed_event_listener = EventRegister.on('JOIN_ROOM_FAILED', (error)=>this.displayError(error)); 
+        this.disconnect_game_room_event_listener = EventRegister.on('DISCONNECTED_GAME_ROOM', ()=>this.setState({game_state: game_states.MAIN_MENU}));
         this.disconnect_custom_room_event_listener = EventRegister.on('DISCONNECTED_CUSTOM_ROOM', ()=>this.setState({game_state: game_states.CUSTOM_LOBBY}));
     }
  
@@ -197,6 +198,8 @@ export default class App extends Component {
         EventRegister.removeEventListener(this.join_room_event_listener);
         EventRegister.removeEventListener(this.custom_room_event_listener);
         EventRegister.removeEventListener(this.join_room_failed_event_listener);
+        EventRegister.removeEventListener(this.disconnect_game_room_event_listener);
+        EventRegister.removeEventListener(this.disconnect_custom_room_event_listener);
     }
 
     displayError(error) {
@@ -217,7 +220,7 @@ export default class App extends Component {
                 PerformanceSystem,
                 ScoreboardSystem,
                 MinimapSystem,
-                AnnouncementSystem,
+                // AnnouncementSystem,
             ]}
             entities={entities}>
             <StatusBar hidden={true} />
@@ -300,6 +303,7 @@ export default class App extends Component {
     }
 
     render() {
+        // return this.renderGame();
         
         // return <CustomRoomScreen back={()=>this.back()}/>
         switch (this.state.game_state) {

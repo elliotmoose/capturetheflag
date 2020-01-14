@@ -45,5 +45,16 @@ export const UI = {
     announcements: {
         zIndex: 999,
         fontSize: 15,
+        animation : {
+            DURATION_LONG : 2500,
+            DURATION_SHORT : 1400,
+            DURATION_V_SHORT : 700,
+        },
+        layout : {
+            TITLE_FONT_SIZE: 42,
+            SUBTITLE_FONT_SIZE: 18,
+            LARGE_FONT_SIZE: 110,
+            SMALL_FONT_SIZE: 20
+        }
     }
 }
