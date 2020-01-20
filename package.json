@@ -26,6 +26,7 @@
     "@types/react-native": "^0.60.26",
     "react": "16.9.0",
     "react-native": "0.61.2",
+    "react-native-device-info": "^5.4.1",
     "react-native-event-listeners": "^1.0.3",
     "react-native-game-engine": "^0.12.3",
     "rn-sprite-sheet": "^1.1.5",
@@ -44,7 +45,7 @@
   "jest": {
     "preset": "react-native"
   },
-  "rnpm" : {
+  "rnpm": {
     "assets": [
       "./src/assets/fonts"
     ]
