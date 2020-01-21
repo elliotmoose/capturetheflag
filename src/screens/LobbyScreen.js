@@ -4,6 +4,7 @@ import Images from "../assets/Images";
 import { Colors } from "../constants/Colors";
 import { RequestJoinCustomRoom, RequestLoadLobbyRooms, RequestCreateCustomRoom } from "../managers/gamemanager";
 import { EventRegister } from "react-native-event-listeners";
+import { logged_in_user } from "../managers/UserManager";
 
 export default class LobbyScreen extends Component {
     state = {
@@ -39,8 +40,9 @@ export default class LobbyScreen extends Component {
     }
 
     createRoom() {
-        //test
-        RequestCreateCustomRoom('elliot\'s room');
+        //emit event to move to create room screen
+        EventRegister.emit('CREATE_CUSTOM_ROOM');
+        // RequestCreateCustomRoom(`${logged_in_user.username}`);
     }
 
     back() {

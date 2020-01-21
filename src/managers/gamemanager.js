@@ -59,11 +59,16 @@ export var OnReceiveLobbyRoomsUpdate = (rooms) => {
     EventRegister.emit('LOBBY_ROOMS_UPDATE', rooms);
 }
 
-export var RequestCreateCustomRoom = (room_name) => {      
+export var RequestCreateCustomRoom = (room_name, player_per_team, max_score, game_length) => {      
     if(socket && logged_in_user) {
         socket.emit('REQUEST_CREATE_CUSTOM_ROOM', {
             user_id: logged_in_user.id,
-            room_name: room_name
+            room_name: room_name,
+            config : {
+                max_players: player_per_team * 2,
+                max_score,
+                game_length
+            }
         });
     }
     else {

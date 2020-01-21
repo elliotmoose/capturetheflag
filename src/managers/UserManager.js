@@ -46,13 +46,14 @@ export var VerifyLoggedInUser = async () => {
                 EventRegister.emit('USER_VERIFICATION_RESULT', true);                            
             }
             else {
-                EventRegister.emit('USER_VERIFICATION_RESULT', false);            
+                EventRegister.emit('USER_VERIFICATION_RESULT', false); //new user required            
             }
         } catch (error) {
-            EventRegister.emit('USER_VERIFICATION_RESULT', false);            
+            //TODO: REPORT ERROR
+            // EventRegister.emit('USER_VERIFICATION_RESULT', false);            
         }
     }
     else {
-        EventRegister.emit('USER_VERIFICATION_RESULT', false);
+        EventRegister.emit('USER_VERIFICATION_RESULT', false); //new user required
     }
 }

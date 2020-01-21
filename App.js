@@ -68,9 +68,19 @@ import { game_domain } from './src/constants/Config';
 import Announcements from './src/renderers/Announcements';
 import { AnnouncementSystem } from './src/systems/AnnouncementSystem';
 import LoadingScreen from './src/screens/LoadingScreen';
+import CreateRoomScreen from './src/screens/CreateRoomScreen';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window'); //landscape
-const app_states = { LOADING: 'LOADING', NEW_USER: 'NEW_USER', MAIN_MENU:'MAIN_MENU', FIND_MATCH: 'FIND_MATCH', GAME_PLAY: 'GAME_PLAY', CUSTOM_LOBBY: 'CUSTOM_LOBBY', CUSTOM_ROOM: 'CUSTOM_ROOM'};
+const app_states = { 
+    LOADING: 'LOADING',
+    NEW_USER: 'NEW_USER', 
+    MAIN_MENU:'MAIN_MENU', 
+    FIND_MATCH: 'FIND_MATCH', 
+    GAME_PLAY: 'GAME_PLAY', 
+    CUSTOM_LOBBY: 'CUSTOM_LOBBY', 
+    CREAE_CUSTOM_ROOM: 'CREAE_CUSTOM_ROOM',
+    CUSTOM_ROOM: 'CUSTOM_ROOM'
+};
 
 const controls_margin_left = 75;
 var GetEntities = () => {
@@ -185,7 +195,7 @@ export default class App extends PureComponent {
     }
 
     componentWillMount() {
-        this.logged_in_event_listener = EventRegister.on('USER_VERIFICATION_RESULT', (success) => this.setState({app_state: success ? app_states.MAIN_MENU : app_states.NEW_USER})); 
+        this.user_verified_event_listener = EventRegister.on('USER_VERIFICATION_RESULT', (success) => this.setState({app_state: success ? app_states.MAIN_MENU : app_states.NEW_USER})); 
         this.logged_in_event_listener = EventRegister.on('USER_LOGGED_IN', () => this.setState({app_state: app_states.MAIN_MENU})); 
         this.find_match_event_listener = EventRegister.on('FIND_MATCH_UPDATE', ({current_players, max_players}) => this.setState({current_players, max_players})); //update waiting screen
         this.join_room_event_listener = EventRegister.on('JOIN_ROOM_CONFIRMED', ()=>this.setState({app_state: app_states.GAME_PLAY})); //start game when join room triggered
@@ -193,9 +203,11 @@ export default class App extends PureComponent {
         this.join_room_failed_event_listener = EventRegister.on('JOIN_ROOM_FAILED', (error)=>this.displayError(error)); 
         this.disconnect_game_room_event_listener = EventRegister.on('DISCONNECTED_GAME_ROOM', ()=>this.setState({app_state: app_states.MAIN_MENU}));
         this.disconnect_custom_room_event_listener = EventRegister.on('DISCONNECTED_CUSTOM_ROOM', ()=>this.setState({app_state: app_states.CUSTOM_LOBBY}));
+        this.create_custom_room_event_listener = EventRegister.on('CREATE_CUSTOM_ROOM', ()=>this.setState({app_state: app_states.CREAE_CUSTOM_ROOM}));
     }
  
     componentWillUnmount() {
+        EventRegister.removeEventListener(this.user_verified_event_listener);
         EventRegister.removeEventListener(this.logged_in_event_listener);
         EventRegister.removeEventListener(this.find_match_event_listener);
         EventRegister.removeEventListener(this.join_room_event_listener);
@@ -203,6 +215,7 @@ export default class App extends PureComponent {
         EventRegister.removeEventListener(this.join_room_failed_event_listener);
         EventRegister.removeEventListener(this.disconnect_game_room_event_listener);
         EventRegister.removeEventListener(this.disconnect_custom_room_event_listener);
+        EventRegister.removeEventListener(this.create_custom_room_event_listener);
     }
 
     displayError(error) {
@@ -309,10 +322,11 @@ export default class App extends PureComponent {
     render() {
         // return this.renderGame();
         
-        // return <CustomRoomScreen back={()=>this.back()}/>
+        // return <CreateRoomScreen back={()=>this.back()}/>
         switch (this.state.app_state) {
             case app_states.LOADING: 
                 return <LoadingScreen/>;
+
             case app_states.NEW_USER: 
                 return <UsernameScreen/>;
                 
@@ -328,6 +342,9 @@ export default class App extends PureComponent {
             case app_states.CUSTOM_LOBBY: 
                 return <LobbyScreen back={()=>this.back()}/>
             
+            case app_states.CREAE_CUSTOM_ROOM: 
+                return <CreateRoomScreen back={()=>this.back()}/>
+
             case app_states.CUSTOM_ROOM: 
                 return <CustomRoomScreen back={()=>this.back()}/>
             default:            
