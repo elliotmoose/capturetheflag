@@ -69,6 +69,7 @@ import Announcements from './src/renderers/Announcements';
 import { AnnouncementSystem } from './src/systems/AnnouncementSystem';
 import LoadingScreen from './src/screens/LoadingScreen';
 import CreateRoomScreen from './src/screens/CreateRoomScreen';
+import { logged_in_user } from './src/managers/UserManager';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window'); //landscape
 const app_states = { 
@@ -152,7 +153,8 @@ var GetEntities = () => {
 
     let scoreboard = {
         score: [0,0],
-        time: '3:00',
+        remainding_time: 0,
+        time_color: 'white',
         renderer: Scoreboard
     }
 
@@ -275,35 +277,56 @@ export default class App extends PureComponent {
     }
     
     renderMainMenu() {
-        return <View style={{ flex: 1, backgroundColor: 'gray', justifyContent: 'center', alignItems: 'center' }}>
-            <Image source={Images.menu_background} resizeMode='cover' style={{position: 'absolute', width: '100%', height: '100%'}}/>
-            <View style={{marginTop: 22, width: 300, height: 80}}>
-                <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 44, textAlign: 'center', color: 'black', position: 'absolute', left: 6, top: 6, width: 300}}>
-                    CAPTURE THE{'\n'}FLAG
-                </Text>
-                <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 44, textAlign: 'center', color: 'white', position: 'absolute', width: 300}}>
-                    CAPTURE THE{'\n'}FLAG
-                </Text>
-            </View>
-            <Image source={Images.flag} style={{width: 400, flex: 1, marginBottom: 12, marginLeft: 8}} resizeMode='contain'/>            
-            <View style={{height: 40, flexDirection: 'row', alignItems: 'center', marginLeft: 40, marginRight: 40, marginBottom: 25 }}>
-                <TouchableOpacity style={{height: 40}} onPress={()=>this.offsetGameMode(-1)}>
-                    <Image source={Images.arrow_right} resizeMode='contain'  style={{flex: 1, transform:[{rotateY: '180deg'}]}}/>                        
-                </TouchableOpacity>
-                <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 26, textAlign: 'center', color: 'white', width: 120}}>
-                    {this.state.game_modes[this.state.current_game_mode_index]}
-                </Text>
-                <TouchableOpacity style={{height: 40}} onPress={()=>this.offsetGameMode(1)}>
-                    <Image source={Images.arrow_right} resizeMode='contain' style={{flex: 1}}/>                        
-                </TouchableOpacity>
-                <View style={{width: 50}}/>
-                <TouchableOpacity style={{ width: 260, height: 40, backgroundColor: '#3cc969', borderRadius: 12, justifyContent: 'center', alignItems: 'center'}}
-                    onPress={() => this.findMatch()}>
-                    <Text style={{ fontWeight: '500', fontSize: 18, paddingTop: 4, color: 'white', fontFamily: 'Endless Boss Battle' }}>
-                        FIND MATCH
-                </Text>
-                </TouchableOpacity>
-            </View>
+        return <View style={{flex: 1}}> 
+                <Image source={Images.menu_background} resizeMode='cover' style={{position: 'absolute', width: '100%', height: '100%'}}/>
+            <SafeAreaView style={{flex: 1}}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{marginTop: 22, width: 300, height: 80}}>
+                        <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 44, textAlign: 'center', color: 'black', position: 'absolute', left: 6, top: 6, width: 300}}>
+                            CAPTURE THE{'\n'}FLAG
+                        </Text>
+                        <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 44, textAlign: 'center', color: 'white', position: 'absolute', width: 300}}>
+                            CAPTURE THE{'\n'}FLAG
+                        </Text>
+                    </View>
+                    <View style={{position: 'absolute', top: 25, right: 12, width: '100%', alignItems: 'flex-end'}}>
+                        <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 22, textAlign: 'center', color: 'white', width: 120}}>
+                            {logged_in_user.username}
+                        </Text>
+                        <View style={{flexDirection: 'row', alignItems: 'center',}}>
+                            <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 14, textAlign: 'center', color: 'white', marginRight: 12}}>
+                                Win:  {logged_in_user.wins} 
+                            </Text>
+                            <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 14, textAlign: 'center', color: 'white'}}>
+                                Lose:  {logged_in_user.losses}
+                            </Text>
+                            <Image source={Images.flag_red} resizeMode='contain' style={{width: 25, height: 25, marginRight: 2}}/>
+                            <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 14, textAlign: 'center', color: 'white'}}>
+                                {logged_in_user.flags}
+                            </Text>
+                        </View>
+                    </View>
+                    <Image source={Images.flag} style={{width: 400, flex: 1, marginBottom: 12, marginLeft: 8}} resizeMode='contain'/>            
+                    <View style={{height: 40, flexDirection: 'row', alignItems: 'center', marginLeft: 40, marginRight: 40, marginBottom: 25 }}>
+                        <TouchableOpacity style={{height: 40}} onPress={()=>this.offsetGameMode(-1)}>
+                            <Image source={Images.arrow_right} resizeMode='contain'  style={{flex: 1, transform:[{rotateY: '180deg'}]}}/>                        
+                        </TouchableOpacity>
+                        <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 26, textAlign: 'center', color: 'white', width: 120}}>
+                            {this.state.game_modes[this.state.current_game_mode_index]}
+                        </Text>
+                        <TouchableOpacity style={{height: 40}} onPress={()=>this.offsetGameMode(1)}>
+                            <Image source={Images.arrow_right} resizeMode='contain' style={{flex: 1}}/>                        
+                        </TouchableOpacity>
+                        <View style={{width: 50}}/>
+                        <TouchableOpacity style={{ width: 260, height: 40, backgroundColor: '#3cc969', borderRadius: 12, justifyContent: 'center', alignItems: 'center'}}
+                            onPress={() => this.findMatch()}>
+                            <Text style={{ fontWeight: '500', fontSize: 18, paddingTop: 4, color: 'white', fontFamily: 'Endless Boss Battle' }}>
+                                FIND MATCH
+                        </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </SafeAreaView>
         </View>
     }
 

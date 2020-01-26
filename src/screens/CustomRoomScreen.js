@@ -51,7 +51,7 @@ export default class CustomRoomScreen extends Component {
                 let is_room_owner = this.isRoomOwner(player.id);
                 let is_me = player.id == logged_in_user.id;
                 let background_color = is_room_owner ? Colors.green : (is_me ? Colors.yellow : 'white');
-                views.push(<View style={{backgroundColor: background_color, opacity: 0.29, marginTop: marginTop, flex: 1}}>
+                views.push(<View key={player.id} style={{backgroundColor: background_color, opacity: 0.29, marginTop: marginTop, flex: 1}}>
                     <Text>
                         {player.username}
                     </Text>

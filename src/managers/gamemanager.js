@@ -7,6 +7,7 @@ export var players = [];
 export var flags = [];
 export var scoreboard = {
     score: [],
+    remainding_time: 0,
     start_time: 0
 }
 // export var announcement = {
@@ -197,6 +198,7 @@ export var OnReceiveGameState = (state) => {
     players = state.players;
     flags = state.flags;
     scoreboard.score = state.score;
+    scoreboard.remainding_time = state.remainding_time;
 }
 
 export var OnReceiveAnnouncement = (announcement) => {

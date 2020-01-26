@@ -10,7 +10,7 @@ export default class Minimap extends PureComponent {
 
     renderPlayers(scale) {
         
-        return this.props.players.map(player => {
+        return this.props.players.map((player, index) => {
 
             let newRadius = player.radius * scale;
             let newTop = player.position[1] * scale - newRadius;
@@ -20,18 +20,20 @@ export default class Minimap extends PureComponent {
             if (player.id == logged_in_user.id) {
                 playerColor = Colors.minimap_this_player;
             } else {
-                playerColor = (player.team==0) ? Colors.lime_green : Colors.red;
+                playerColor = (player.team==0) ? Colors.team_green : Colors.team_red;
             }
             
 
-            return <View style={[{height: newRadius * 2, width: newRadius * 2, borderRadius: newRadius,
+            return <View 
+            key={`player_${index}`}
+            style={[{height: newRadius * 2, width: newRadius * 2, borderRadius: newRadius,
                 top: newTop, left: newLeft,
                 backgroundColor: playerColor, position: "absolute"}]}/>
         })
     }
 
     renderFlags(scale) {
-        return this.props.flags.map(flag => {
+        return this.props.flags.map((flag, index) => {
 
             let newRadius = flag.radius * scale * UI.minimap.flag_scale_factor // Only apply FLAG_SCALE_FACTOR to the radius so as not to mess up positioning
             let newTop = flag.position[1] * scale - newRadius
@@ -39,6 +41,7 @@ export default class Minimap extends PureComponent {
             let flagImage = (flag.team == 0) ? Images.flag_green : Images.flag_red
 
             return <Image 
+                key={`flag_${index}`}
                 source={flagImage}
                 resizeMode="contain"
                 style={{
@@ -54,13 +57,14 @@ export default class Minimap extends PureComponent {
     }
 
     renderBases(scale) {
-        return this.props.bases.map(base => {
+        return this.props.bases.map((base, index) => {
 
             let newRadius = base.radius * scale
             let newTop = base.position[1] * scale - newRadius
             let newLeft = base.position[0] * scale - newRadius
 
             return <View 
+                key={`base_${index}`}
                 style={{
                     position: "absolute",
                     height: newRadius * 2,
