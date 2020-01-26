@@ -42,6 +42,7 @@ import {
     RequestLoadLobbyRooms,
     RequestFindMatch,
 } from './src/managers/gamemanager';
+
 import Player from './src/renderers/Player';
 import Button from './src/renderers/controls/Button';
 import { JoystickSystem } from './src/systems/JoystickSystem';
@@ -66,9 +67,21 @@ import UsernameScreen from './src/screens/UsernameScreen';
 import { game_domain } from './src/constants/Config';
 import Announcements from './src/renderers/Announcements';
 import { AnnouncementSystem } from './src/systems/AnnouncementSystem';
+import LoadingScreen from './src/screens/LoadingScreen';
+import CreateRoomScreen from './src/screens/CreateRoomScreen';
+import { logged_in_user } from './src/managers/UserManager';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window'); //landscape
-const game_states = { NEW_USER: 'NEW_USER', MAIN_MENU:'MAIN_MENU', FIND_MATCH: 'FIND_MATCH', GAME_PLAY: 'GAME_PLAY', CUSTOM_LOBBY: 'CUSTOM_LOBBY', CUSTOM_ROOM: 'CUSTOM_ROOM'};
+const app_states = { 
+    LOADING: 'LOADING',
+    NEW_USER: 'NEW_USER', 
+    MAIN_MENU:'MAIN_MENU', 
+    FIND_MATCH: 'FIND_MATCH', 
+    GAME_PLAY: 'GAME_PLAY', 
+    CUSTOM_LOBBY: 'CUSTOM_LOBBY', 
+    CREAE_CUSTOM_ROOM: 'CREAE_CUSTOM_ROOM',
+    CUSTOM_ROOM: 'CUSTOM_ROOM'
+};
 
 const controls_margin_left = 75;
 var GetEntities = () => {
@@ -140,7 +153,8 @@ var GetEntities = () => {
 
     let scoreboard = {
         score: [0,0],
-        time: '3:00',
+        remainding_time: 0,
+        time_color: 'white',
         renderer: Scoreboard
     }
 
@@ -171,7 +185,7 @@ let entities = GetEntities();
 export default class App extends PureComponent {
     
     state = {
-        game_state: game_states.NEW_USER,
+        app_state: app_states.LOADING,
         current_players: 0,
         max_players: 0,
         game_modes: ["CUSTOM", "NORMAL"],
@@ -183,16 +197,19 @@ export default class App extends PureComponent {
     }
 
     componentWillMount() {
-        this.logged_in_event_listener = EventRegister.on('USER_LOGGED_IN', () => this.setState({game_state: game_states.MAIN_MENU})); 
+        this.user_verified_event_listener = EventRegister.on('USER_VERIFICATION_RESULT', (success) => this.setState({app_state: success ? app_states.MAIN_MENU : app_states.NEW_USER})); 
+        this.logged_in_event_listener = EventRegister.on('USER_LOGGED_IN', () => this.setState({app_state: app_states.MAIN_MENU})); 
         this.find_match_event_listener = EventRegister.on('FIND_MATCH_UPDATE', ({current_players, max_players}) => this.setState({current_players, max_players})); //update waiting screen
-        this.join_room_event_listener = EventRegister.on('JOIN_ROOM_CONFIRMED', ()=>this.setState({game_state: game_states.GAME_PLAY})); //start game when join room triggered
-        this.custom_room_event_listener = EventRegister.on('JOIN_CUSTOM_ROOM_CONFIRMED', ()=>this.setState({game_state: game_states.CUSTOM_ROOM})); 
+        this.join_room_event_listener = EventRegister.on('JOIN_ROOM_CONFIRMED', ()=>this.setState({app_state: app_states.GAME_PLAY})); //start game when join room triggered
+        this.custom_room_event_listener = EventRegister.on('JOIN_CUSTOM_ROOM_CONFIRMED', ()=>this.setState({app_state: app_states.CUSTOM_ROOM})); 
         this.join_room_failed_event_listener = EventRegister.on('JOIN_ROOM_FAILED', (error)=>this.displayError(error)); 
-        this.disconnect_game_room_event_listener = EventRegister.on('DISCONNECTED_GAME_ROOM', ()=>this.setState({game_state: game_states.MAIN_MENU}));
-        this.disconnect_custom_room_event_listener = EventRegister.on('DISCONNECTED_CUSTOM_ROOM', ()=>this.setState({game_state: game_states.CUSTOM_LOBBY}));
+        this.disconnect_game_room_event_listener = EventRegister.on('DISCONNECTED_GAME_ROOM', ()=>this.setState({app_state: app_states.MAIN_MENU}));
+        this.disconnect_custom_room_event_listener = EventRegister.on('DISCONNECTED_CUSTOM_ROOM', ()=>this.setState({app_state: app_states.CUSTOM_LOBBY}));
+        this.create_custom_room_event_listener = EventRegister.on('CREATE_CUSTOM_ROOM', ()=>this.setState({app_state: app_states.CREAE_CUSTOM_ROOM}));
     }
  
     componentWillUnmount() {
+        EventRegister.removeEventListener(this.user_verified_event_listener);
         EventRegister.removeEventListener(this.logged_in_event_listener);
         EventRegister.removeEventListener(this.find_match_event_listener);
         EventRegister.removeEventListener(this.join_room_event_listener);
@@ -200,6 +217,7 @@ export default class App extends PureComponent {
         EventRegister.removeEventListener(this.join_room_failed_event_listener);
         EventRegister.removeEventListener(this.disconnect_game_room_event_listener);
         EventRegister.removeEventListener(this.disconnect_custom_room_event_listener);
+        EventRegister.removeEventListener(this.create_custom_room_event_listener);
     }
 
     displayError(error) {
@@ -239,18 +257,19 @@ export default class App extends PureComponent {
     getSelectedGameMode() {
         return this.state.game_modes[this.state.current_game_mode_index];
     }
+
     findMatch() {
         switch (this.getSelectedGameMode()) {            
             case "CUSTOM":
                 InitializeSocketIO(game_domain); 
                 RequestLoadLobbyRooms();
-                this.setState({game_state: game_states.CUSTOM_LOBBY});
+                this.setState({app_state: app_states.CUSTOM_LOBBY});
                 break;
 
             case "NORMAL":
                 InitializeSocketIO(game_domain);                
                 RequestFindMatch(MatchmakingTypes.NORMAL);
-                this.setState({game_state: game_states.FIND_MATCH});
+                this.setState({app_state: app_states.FIND_MATCH});
                     
             default:
                 break;
@@ -258,35 +277,56 @@ export default class App extends PureComponent {
     }
     
     renderMainMenu() {
-        return <View style={{ flex: 1, backgroundColor: 'gray', justifyContent: 'center', alignItems: 'center' }}>
-            <Image source={Images.menu_background} resizeMode='cover' style={{position: 'absolute', width: '100%', height: '100%'}}/>
-            <View style={{marginTop: 22, width: 300, height: 80}}>
-                <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 44, textAlign: 'center', color: 'black', position: 'absolute', left: 6, top: 6, width: 300}}>
-                    CAPTURE THE{'\n'}FLAG
-                </Text>
-                <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 44, textAlign: 'center', color: 'white', position: 'absolute', width: 300}}>
-                    CAPTURE THE{'\n'}FLAG
-                </Text>
-            </View>
-            <Image source={Images.flag} style={{width: 400, flex: 1, marginBottom: 12, marginLeft: 8}} resizeMode='contain'/>            
-            <View style={{height: 40, flexDirection: 'row', alignItems: 'center', marginLeft: 40, marginRight: 40, marginBottom: 25 }}>
-                <TouchableOpacity style={{height: 40}} onPress={()=>this.offsetGameMode(-1)}>
-                    <Image source={Images.arrow_right} resizeMode='contain'  style={{flex: 1, transform:[{rotateY: '180deg'}]}}/>                        
-                </TouchableOpacity>
-                <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 26, textAlign: 'center', color: 'white', width: 120}}>
-                    {this.state.game_modes[this.state.current_game_mode_index]}
-                </Text>
-                <TouchableOpacity style={{height: 40}} onPress={()=>this.offsetGameMode(1)}>
-                    <Image source={Images.arrow_right} resizeMode='contain' style={{flex: 1}}/>                        
-                </TouchableOpacity>
-                <View style={{width: 50}}/>
-                <TouchableOpacity style={{ width: 260, height: 40, backgroundColor: '#3cc969', borderRadius: 12, justifyContent: 'center', alignItems: 'center'}}
-                    onPress={() => this.findMatch()}>
-                    <Text style={{ fontWeight: '500', fontSize: 18, paddingTop: 4, color: 'white', fontFamily: 'Endless Boss Battle' }}>
-                        FIND MATCH
-                </Text>
-                </TouchableOpacity>
-            </View>
+        return <View style={{flex: 1}}> 
+                <Image source={Images.menu_background} resizeMode='cover' style={{position: 'absolute', width: '100%', height: '100%'}}/>
+            <SafeAreaView style={{flex: 1}}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{marginTop: 22, width: 300, height: 80}}>
+                        <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 44, textAlign: 'center', color: 'black', position: 'absolute', left: 6, top: 6, width: 300}}>
+                            CAPTURE THE{'\n'}FLAG
+                        </Text>
+                        <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 44, textAlign: 'center', color: 'white', position: 'absolute', width: 300}}>
+                            CAPTURE THE{'\n'}FLAG
+                        </Text>
+                    </View>
+                    <View style={{position: 'absolute', top: 25, right: 12, width: '100%', alignItems: 'flex-end'}}>
+                        <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 22, textAlign: 'center', color: 'white', width: 120}}>
+                            {logged_in_user.username}
+                        </Text>
+                        <View style={{flexDirection: 'row', alignItems: 'center',}}>
+                            <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 14, textAlign: 'center', color: 'white', marginRight: 12}}>
+                                Win:  {logged_in_user.wins} 
+                            </Text>
+                            <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 14, textAlign: 'center', color: 'white'}}>
+                                Lose:  {logged_in_user.losses}
+                            </Text>
+                            <Image source={Images.flag_red} resizeMode='contain' style={{width: 25, height: 25, marginRight: 2}}/>
+                            <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 14, textAlign: 'center', color: 'white'}}>
+                                {logged_in_user.flags}
+                            </Text>
+                        </View>
+                    </View>
+                    <Image source={Images.flag} style={{width: 400, flex: 1, marginBottom: 12, marginLeft: 8}} resizeMode='contain'/>            
+                    <View style={{height: 40, flexDirection: 'row', alignItems: 'center', marginLeft: 40, marginRight: 40, marginBottom: 25 }}>
+                        <TouchableOpacity style={{height: 40}} onPress={()=>this.offsetGameMode(-1)}>
+                            <Image source={Images.arrow_right} resizeMode='contain'  style={{flex: 1, transform:[{rotateY: '180deg'}]}}/>                        
+                        </TouchableOpacity>
+                        <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 26, textAlign: 'center', color: 'white', width: 120}}>
+                            {this.state.game_modes[this.state.current_game_mode_index]}
+                        </Text>
+                        <TouchableOpacity style={{height: 40}} onPress={()=>this.offsetGameMode(1)}>
+                            <Image source={Images.arrow_right} resizeMode='contain' style={{flex: 1}}/>                        
+                        </TouchableOpacity>
+                        <View style={{width: 50}}/>
+                        <TouchableOpacity style={{ width: 260, height: 40, backgroundColor: '#3cc969', borderRadius: 12, justifyContent: 'center', alignItems: 'center'}}
+                            onPress={() => this.findMatch()}>
+                            <Text style={{ fontWeight: '500', fontSize: 18, paddingTop: 4, color: 'white', fontFamily: 'Endless Boss Battle' }}>
+                                FIND MATCH
+                        </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </SafeAreaView>
         </View>
     }
 
@@ -299,30 +339,36 @@ export default class App extends PureComponent {
     }
 
     back() {
-        this.setState({game_state: game_states.MAIN_MENU});
+        this.setState({app_state: app_states.MAIN_MENU});
     }
 
     render() {
         // return this.renderGame();
         
-        // return <CustomRoomScreen back={()=>this.back()}/>
-        switch (this.state.game_state) {
-            case game_states.NEW_USER: 
-                return <UsernameScreen/>
+        // return <CreateRoomScreen back={()=>this.back()}/>
+        switch (this.state.app_state) {
+            case app_states.LOADING: 
+                return <LoadingScreen/>;
+
+            case app_states.NEW_USER: 
+                return <UsernameScreen/>;
                 
-            case game_states.MAIN_MENU:
+            case app_states.MAIN_MENU:
                 return this.renderMainMenu();
 
-            case game_states.FIND_MATCH:
+            case app_states.FIND_MATCH:
                 return this.renderFindMatch();
 
-            case game_states.GAME_PLAY:
+            case app_states.GAME_PLAY:
                 return this.renderGame();
 
-            case game_states.CUSTOM_LOBBY: 
+            case app_states.CUSTOM_LOBBY: 
                 return <LobbyScreen back={()=>this.back()}/>
             
-            case game_states.CUSTOM_ROOM: 
+            case app_states.CREAE_CUSTOM_ROOM: 
+                return <CreateRoomScreen back={()=>this.back()}/>
+
+            case app_states.CUSTOM_ROOM: 
                 return <CustomRoomScreen back={()=>this.back()}/>
             default:            
                 return this.renderMainMenu();

@@ -7,4 +7,7 @@ export var Colors = {
     green_dark: '#1C903D',
     gray: '#BFBFBF',
     gray_dark: '#97979',
+    team_green: '#46f07b',
+    team_red: '#DD1111',
+    minimap_this_player: '#EB8934',
 }

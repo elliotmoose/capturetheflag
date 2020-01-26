@@ -1,17 +1,17 @@
 import {Platform} from 'react-native'
 import {Errors} from '../constants/Strings';
 import { api_domain } from '../constants/Config';
+import * as DeviceInfo from 'react-native-device-info';
+
 // import Config from '../constants/Config';
-// import * as DeviceInfo from 'react-native-device-info'
 
 export var NetworkSignupNewPlayer = async (username) => {
     let url = api_domain + '/signup';
-    // let deviceID = DeviceInfo.default.getUniqueID();
-    // let params = {
-    //     deviceID: deviceID
-    // };
+    let device_id = DeviceInfo.default.getUniqueId();
+    
     let params = {
-        username
+        username,
+        device_id
     }
 
     try {        
@@ -34,6 +34,33 @@ export var NetworkSignupNewPlayer = async (username) => {
     }
 }
 
+export var NetworkVerifyPlayer = async (user_id) => {
+    let url = api_domain + '/login';
+    let device_id = DeviceInfo.default.getUniqueId();
+    
+    let params = {
+        user_id,
+        device_id
+    }
+
+    try {        
+        let response = await JsonRequest('POST', url, params);
+
+        if(response.status == 'ERROR' || response.status == 'EXCEPTION')
+        {
+            throw response.error
+        }
+        else if(response.status == 'SUCCESS')
+        {
+            return response.data
+        }
+    } catch (error) {
+        // console.log(error)
+        // error.message = url;
+        throw error;
+        
+    }
+}
 
 export var JsonRequest = async (method,url,body) => 
 {
