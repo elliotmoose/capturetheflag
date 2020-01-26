@@ -77,12 +77,23 @@ export default class CreateRoomScreen extends Component {
                             })}
                         </View>
                         <View style={styles.buttonOptionRow}>
-                            {[5,10,15].map((item) => {
+                            {[1, 5,10,15].map((item) => {
                                 let selected = this.state.game_length == item;
 
                                 return <TouchableOpacity style={styles.buttonOptionTouchable} onPress={()=>this.setState({game_length: item})}>
                                     <Text style={[styles.buttonOptionText, {color: selected ? Colors.green : 'white'}]}>
                                         {item}:00
+                                    </Text>
+                                </TouchableOpacity>
+                            })}
+                        </View>
+                        <View style={styles.buttonOptionRow}>
+                            {[1, 5,10,15].map((item) => {
+                                let selected = this.state.max_score == item;
+
+                                return <TouchableOpacity style={styles.buttonOptionTouchable} onPress={()=>this.setState({max_score: item})}>
+                                    <Text style={[styles.buttonOptionText, {color: selected ? Colors.green : 'white'}]}>
+                                        {item}
                                     </Text>
                                 </TouchableOpacity>
                             })}

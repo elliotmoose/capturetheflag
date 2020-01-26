@@ -1,6 +1,6 @@
 import { NetworkSignupNewPlayer, NetworkVerifyPlayer } from "./NetworkManager";
 import { EventRegister } from "react-native-event-listeners";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, Alert } from "react-native";
 
 
 export var logged_in_user = {
@@ -49,6 +49,7 @@ export var VerifyLoggedInUser = async () => {
                 EventRegister.emit('USER_VERIFICATION_RESULT', false); //new user required            
             }
         } catch (error) {
+            Alert.alert('Connection Failed', error.message);
             //TODO: REPORT ERROR
             // EventRegister.emit('USER_VERIFICATION_RESULT', false);            
         }

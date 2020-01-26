@@ -9,7 +9,7 @@ export default class Base extends PureComponent {
     let y = this.props.render_position[1] - radius;
     
     return (
-      <View style={[styles.container, { left: x, top: y, borderRadius: radius, height: radius*2, width: radius*2, opacity: this.props.active ? 0.4 : 0.7}]}/>      
+      <View style={[styles.container, { left: x, top: y, borderRadius: radius, height: radius*2, width: radius*2, opacity: 0.2}]}/>      
     );
   }
 }
@@ -17,10 +17,10 @@ export default class Base extends PureComponent {
 const styles = StyleSheet.create({
   container: {
     borderColor: "#CCC",    
-    backgroundColor: "gray",
+    backgroundColor: "black",
     position: "absolute",
     padding: 0,
     zIndex: UI.base.zIndex,
-    opacity: 0.5    
+    opacity: 0.1   
   }
 });

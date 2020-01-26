@@ -18,7 +18,7 @@ export default class Minimap extends PureComponent {
             let playerColor;
 
             if (player.id == logged_in_user.id) {
-                playerColor = "yellow";
+                playerColor = Colors.minimap_this_player;
             } else {
                 playerColor = (player.team==0) ? Colors.lime_green : Colors.red;
             }
@@ -88,16 +88,16 @@ export default class Minimap extends PureComponent {
     }
 
     render() {
-        
+        const borderWidth = 2
         return (
             <View style={{
                 position: "absolute",
-                height: this.props.height,
-                width: this.props.width,
-                top: this.props.offset[1],
-                left: this.props.offset[0],
+                height: this.props.height+2*borderWidth,
+                width: this.props.width+2*borderWidth,
+                top: this.props.offset[1]-borderWidth,
+                left: this.props.offset[0]-borderWidth,
                 borderColor: 'gray',
-                borderWidth: 2,
+                borderWidth: borderWidth,
                 borderRadius: 8,
                 overflow:'hidden',
                 zIndex: UI.controls.zIndex                

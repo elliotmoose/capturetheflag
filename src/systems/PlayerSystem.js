@@ -26,6 +26,7 @@ export const PlayerSystem = (entities, { time }) => {
 
             //UPDATE ALL STATS
             // player.current_stamina = updated_state_player.current_stamina;
+            player.team = updated_state_player.team;
             player.username = updated_state_player.username;
             player.action = updated_state_player.action;
             player.radius = updated_state_player.radius;
