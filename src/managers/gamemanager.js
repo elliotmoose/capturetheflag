@@ -1,8 +1,8 @@
 import io from 'socket.io-client';
 import Player from '../renderers/Player';
 import { EventRegister } from 'react-native-event-listeners';
-import { logged_in_user } from './UserManager';
 import { game_domain } from '../constants/Config';
+import { GetLoggedInUser } from './UserManager';
 export var players = [];
 export var flags = [];
 export var scoreboard = {
@@ -61,6 +61,7 @@ export var OnReceiveLobbyRoomsUpdate = (rooms) => {
 }
 
 export var RequestCreateCustomRoom = (room_name, player_per_team, max_score, game_length) => {      
+    let logged_in_user = GetLoggedInUser();
     if(socket && logged_in_user) {
         socket.emit('REQUEST_CREATE_CUSTOM_ROOM', {
             user_id: logged_in_user.id,
@@ -90,7 +91,9 @@ export var CommandJoinCustomRoom = namespace => {
     EventRegister.emit('JOIN_CUSTOM_ROOM_CONFIRMED');
 }
 
+
 export var OnCommandGetUserId = ()=>{
+    let logged_in_user = GetLoggedInUser();
     if(socket && logged_in_user) {
         socket.emit('REQUEST_SET_USER_ID', {user_id: logged_in_user.id});
     }
@@ -110,7 +113,8 @@ export var RequestLeaveCustomRoom = () => {
 }
 
 export var OnDisconnectCustomRoom = () => {
-    EventRegister.emit('DISCONNECTED_CUSTOM_ROOM');
+    EventRegister.emit('DISCONNECTED_CUSTOM_ROOM');    
+    InitializeSocketIO(game_domain);
 }
 
 export var OnDisconnectGameRoom = () => {
@@ -118,6 +122,7 @@ export var OnDisconnectGameRoom = () => {
 }
 
 export var RequestJoinTeam = (team) => {
+    let logged_in_user = GetLoggedInUser();
     if(socket && logged_in_user) {
         socket.emit('REQUEST_JOIN_TEAM', {user_id: logged_in_user.id, team: team});
     }    
@@ -125,7 +130,17 @@ export var RequestJoinTeam = (team) => {
         console.log('NO SOCKET OR LOGGED IN USER');
     }
 }
+
+export var RequestKickUser = (user_id) => {
+    let logged_in_user = GetLoggedInUser();
+    if(logged_in_user) {
+        let requesting_user_id = logged_in_user.id;
+        socket.emit('REQUEST_KICK_USER', {requesting_user_id, user_id});
+    }
+}
+
 export var RequestStartGame = () => {
+    let logged_in_user = GetLoggedInUser();
     if(socket && logged_in_user) {
         socket.emit('REQUEST_START_CUSTOM_GAME', {user_id: logged_in_user.id});
     }
@@ -137,6 +152,7 @@ export var RequestStartGame = () => {
 
 export var RequestFindMatch = (matchmaking_type) => {
     if(socket) {
+        let logged_in_user = GetLoggedInUser();
         socket.emit('REQUEST_FIND_MATCH', {user_id: logged_in_user.id, type: matchmaking_type});        
     }
     else {
@@ -160,6 +176,7 @@ export var CommandJoinGameRoom = namespace => {
 };
 
 export var ConfirmConnectGameRoom = () => {
+    let logged_in_user = GetLoggedInUser();
     if(socket && logged_in_user) {
         socket.emit('REQUEST_CONFIRM_CONNECT', {user_id: logged_in_user.id});
     }
@@ -207,6 +224,7 @@ export var OnReceiveAnnouncement = (announcement) => {
 
 export var SendControls = controls => {
     if(socket) {
+        let logged_in_user = GetLoggedInUser();
         socket.emit('CONTROLS', {controls, user_id: logged_in_user.id});
     }
 };

@@ -4,7 +4,7 @@ import { Colors } from "../constants/Colors";
 import Images from "../assets/Images";
 
 import { UI } from "../constants/UI";
-import { logged_in_user } from "../managers/UserManager";
+import { GetLoggedInUser } from "../managers/UserManager";
  
 export default class Minimap extends PureComponent {
 
@@ -16,7 +16,7 @@ export default class Minimap extends PureComponent {
             let newTop = player.position[1] * scale - newRadius;
             let newLeft = player.position[0] * scale - newRadius;
             let playerColor;
-
+            let logged_in_user = GetLoggedInUser();
             if (player.id == logged_in_user.id) {
                 playerColor = Colors.minimap_this_player;
             } else {

@@ -48,7 +48,10 @@ export var NetworkVerifyPlayer = async (user_id) => {
 
         if(response.status == 'ERROR' || response.status == 'EXCEPTION')
         {
-            throw response.error
+            
+            if(response.error) {
+                throw response.error
+            }
         }
         else if(response.status == 'SUCCESS')
         {

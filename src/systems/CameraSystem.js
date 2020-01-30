@@ -1,5 +1,5 @@
 import {Dimensions} from 'react-native';
-import { logged_in_user } from '../managers/UserManager';
+import { GetLoggedInUser } from '../managers/UserManager';
 
 const {width: SCREENWIDTH, height: SCREENHEIGHT} = Dimensions.get('window'); //landscape
 export const CameraSystem = (entities, {time}) => {
@@ -13,7 +13,8 @@ export const CameraSystem = (entities, {time}) => {
     camera.position[0] += Math.cos(angle) * speed;
     camera.position[1] += Math.sin(angle) * speed;
   }
-  
+
+  let logged_in_user = GetLoggedInUser();
   if(logged_in_user) {
     let player = Object.values(entities).filter(e => e.id == logged_in_user.id)[0];
   

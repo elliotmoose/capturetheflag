@@ -69,7 +69,7 @@ import Announcements from './src/renderers/Announcements';
 import { AnnouncementSystem } from './src/systems/AnnouncementSystem';
 import LoadingScreen from './src/screens/LoadingScreen';
 import CreateRoomScreen from './src/screens/CreateRoomScreen';
-import { logged_in_user } from './src/managers/UserManager';
+import { GetLoggedInUser, VerifyLoggedInUser } from './src/managers/UserManager';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window'); //landscape
 const app_states = { 
@@ -203,7 +203,10 @@ export default class App extends PureComponent {
         this.join_room_event_listener = EventRegister.on('JOIN_ROOM_CONFIRMED', ()=>this.setState({app_state: app_states.GAME_PLAY})); //start game when join room triggered
         this.custom_room_event_listener = EventRegister.on('JOIN_CUSTOM_ROOM_CONFIRMED', ()=>this.setState({app_state: app_states.CUSTOM_ROOM})); 
         this.join_room_failed_event_listener = EventRegister.on('JOIN_ROOM_FAILED', (error)=>this.displayError(error)); 
-        this.disconnect_game_room_event_listener = EventRegister.on('DISCONNECTED_GAME_ROOM', ()=>this.setState({app_state: app_states.MAIN_MENU}));
+        this.disconnect_game_room_event_listener = EventRegister.on('DISCONNECTED_GAME_ROOM', async ()=>{
+            await VerifyLoggedInUser(); //update user stats
+            this.setState({app_state: app_states.MAIN_MENU})
+        });
         this.disconnect_custom_room_event_listener = EventRegister.on('DISCONNECTED_CUSTOM_ROOM', ()=>this.setState({app_state: app_states.CUSTOM_LOBBY}));
         this.create_custom_room_event_listener = EventRegister.on('CREATE_CUSTOM_ROOM', ()=>this.setState({app_state: app_states.CREAE_CUSTOM_ROOM}));
     }
@@ -277,6 +280,10 @@ export default class App extends PureComponent {
     }
     
     renderMainMenu() {
+        let logged_in_user = GetLoggedInUser();
+        if(!logged_in_user) {
+            return <View/>;
+        }
         return <View style={{flex: 1}}> 
                 <Image source={Images.menu_background} resizeMode='cover' style={{position: 'absolute', width: '100%', height: '100%'}}/>
             <SafeAreaView style={{flex: 1}}>

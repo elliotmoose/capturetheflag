@@ -4,7 +4,6 @@ import Images from "../assets/Images";
 import { Colors } from "../constants/Colors";
 import { RequestJoinCustomRoom, RequestLoadLobbyRooms, RequestCreateCustomRoom } from "../managers/gamemanager";
 import { EventRegister } from "react-native-event-listeners";
-import { logged_in_user } from "../managers/UserManager";
 
 export default class LobbyScreen extends Component {
     state = {

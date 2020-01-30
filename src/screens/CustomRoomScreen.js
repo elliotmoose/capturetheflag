@@ -4,7 +4,7 @@ import Images from "../assets/Images";
 import { Colors } from "../constants/Colors";
 import * as GameManager from "../managers/gamemanager";
 import { EventRegister } from "react-native-event-listeners";
-import { logged_in_user } from "../managers/UserManager";
+import { GetLoggedInUser } from "../managers/UserManager";
 
 export default class CustomRoomScreen extends Component {
     state = {
@@ -21,6 +21,13 @@ export default class CustomRoomScreen extends Component {
     joinTeam(team) {
         GameManager.RequestJoinTeam(team);
     }
+
+    kickUser(user_id) {
+        if(this.state.room && this.state.room.id) {
+            GameManager.RequestKickUser(user_id, this.state.room.id);
+        }
+    }
+
     renderPlayersInTeam(team) {
         let room = this.state.room;
         if(!room) {
@@ -33,7 +40,7 @@ export default class CustomRoomScreen extends Component {
 
         
 
-        for(let i=0;i<no_of_players_per_team; i++) {
+        for(let i=0;i<no_of_players_per_team; i++) {            
             let marginTop = 4;
             if(i == 0) {
                 marginTop = 0
@@ -49,17 +56,26 @@ export default class CustomRoomScreen extends Component {
             }
             else {
                 let is_room_owner = this.isRoomOwner(player.id);
+                let logged_in_user = GetLoggedInUser();
                 let is_me = player.id == logged_in_user.id;
                 let background_color = is_room_owner ? Colors.green : (is_me ? Colors.yellow : 'white');
-                views.push(<View key={player.id} style={{backgroundColor: background_color, opacity: 0.29, marginTop: marginTop, flex: 1}}>
-                    <Text>
+                // let background_color = player.team == 0 ? Colors.yellow : Colors.yellow;
+                views.push(<View key={player.id} style={{backgroundColor: background_color, marginTop: marginTop, flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+                    <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 22, color: 'white', marginLeft: 8, marginTop: 4}}>
                         {player.username}
                     </Text>
+                    <View style={{flex: 1}}></View>
+                    {false || <TouchableOpacity style={{height: 24, marginRight: 4, justifyContent: 'center', alignItems: 'center'}} onPress={()=>this.kickUser(player.id)}>
+                        <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 32, color: Colors.red}}>X</Text>
+                        </TouchableOpacity>}
                 </View>);
             }
         }
 
         return <View style={{flex: 1, margin: 8}}>
+            <View style={{justifyContent: 'center', alignItems: 'center', height: 30, width: '100%'}}>  
+                <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 22, color: team == 0 ? Colors.green : Colors.red}}>{team == 0 ? 'Green Team' : 'Red Team'}</Text>
+            </View>
             {views}
         </View>;
     }
@@ -78,12 +94,13 @@ export default class CustomRoomScreen extends Component {
     }
 
     render() {        
-        let room_name = this.state.room ? this.state.room.name : 'Not Connected';        
+        let room_name = this.state.room ? this.state.room.name : 'Not Connected';      
+        let logged_in_user = GetLoggedInUser();  
         let is_room_owner = this.isRoomOwner(logged_in_user.id);
         return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             <Image source={Images.menu_background} resizeMode='cover' style={{position: 'absolute', width: '100%', height: '100%'}}/>                      
             <View style={{width: '100%', height: 27, marginTop: 20, marginBottom: 16,}}>
-                <View style={{marginLeft: 0,  height: '100%'}}>
+                <View style={{marginLeft: 22,  height: '100%'}}>
                     <Text style={{fontFamily: 'Endless Boss Battle', fontSize: 32, textAlign: 'center', color: 'black', position: 'absolute', left: 4, top: 4, width: 300}}>
                     {room_name}
                     </Text>                

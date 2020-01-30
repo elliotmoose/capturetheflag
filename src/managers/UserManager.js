@@ -1,15 +1,26 @@
 import { NetworkSignupNewPlayer, NetworkVerifyPlayer } from "./NetworkManager";
 import { EventRegister } from "react-native-event-listeners";
 import { AsyncStorage, Alert } from "react-native";
+import { Errors } from "../constants/Strings";
 
 
-export var logged_in_user = {
+var logged_in_user = {
     // username: 'elliotmoose',
     // id: '12345',
     username: 'enyi',
     id: '54321',    
     // username: 'bgroud',
     // id: '12321',    
+}
+
+export var GetLoggedInUser = () => {
+    if(logged_in_user) {
+        return logged_in_user;
+    }
+    else {
+        EventRegister.emit('USER_VERIFICATION_RESULT', false); //new user required
+        return undefined;
+    }
 }
 
 export var SignupNewPlayer = async (username) => {
@@ -49,7 +60,12 @@ export var VerifyLoggedInUser = async () => {
                 EventRegister.emit('USER_VERIFICATION_RESULT', false); //new user required            
             }
         } catch (error) {
-            Alert.alert('Connection Failed', error.message);
+            if(error.status == Errors.NO_INTERNET.status) {
+                Alert.alert('Connection Failed', JSON.stringify(error));
+            }
+            else {                
+                EventRegister.emit('USER_VERIFICATION_RESULT', false); //new user required
+            }
             //TODO: REPORT ERROR
             // EventRegister.emit('USER_VERIFICATION_RESULT', false);            
         }

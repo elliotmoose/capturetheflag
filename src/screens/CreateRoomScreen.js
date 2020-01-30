@@ -4,7 +4,7 @@ import Images from "../assets/Images";
 import { Colors } from "../constants/Colors";
 import * as GameManager from "../managers/gamemanager";
 import { EventRegister } from "react-native-event-listeners";
-import { logged_in_user } from "../managers/UserManager";
+import { GetLoggedInUser } from "../managers/UserManager";
 
 export default class CreateRoomScreen extends Component {
     state = {
@@ -16,6 +16,7 @@ export default class CreateRoomScreen extends Component {
     }    
 
     componentWillMount() {
+        let logged_in_user = GetLoggedInUser();
         if(!logged_in_user) {
             return;
         }
@@ -32,6 +33,7 @@ export default class CreateRoomScreen extends Component {
     }
 
     create() {
+        let logged_in_user = GetLoggedInUser();
         let room_title = this.state.room_title || `${logged_in_user.username}'s room`;
         GameManager.RequestCreateCustomRoom(room_title, this.state.player_per_team, this.state.max_score, this.state.game_length);
     }

@@ -4,7 +4,7 @@ import Images from "../assets/Images";
 import { Colors } from "../constants/Colors";
 import * as GameManager from "../managers/gamemanager";
 import { EventRegister } from "react-native-event-listeners";
-import { logged_in_user, SignupNewPlayer } from "../managers/UserManager";
+import { SignupNewPlayer } from "../managers/UserManager";
 
 export default class UsernameScreen extends Component {
     state = {
